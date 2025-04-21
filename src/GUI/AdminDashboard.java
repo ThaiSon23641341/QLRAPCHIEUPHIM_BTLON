@@ -6,12 +6,17 @@ import javax.swing.table.TableRowSorter;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class AdminDashboard extends JFrame {
     private JTable movieTable;
     private DefaultTableModel tableModel;
     private JTextField searchField;
-    private JButton addButton, editButton, deleteButton, logoutButton;
+    private JButton addButton, editButton, deleteButton, logoutButton, bookButton, bookingHistoryButton;
+    private List<String> bookedSeats;
 
     public AdminDashboard() {
         setTitle("Movies Management System - Admin Dashboard");
@@ -53,7 +58,7 @@ public class AdminDashboard extends JFrame {
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Table
-        String[] columns = {"ID", "Title", "Genre", "Duration", "Release Date", "Price"};
+        String[] columns = {"ID", "Title", "Genre", "Duration", "Release Date", "Price", "Status"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -78,14 +83,20 @@ public class AdminDashboard extends JFrame {
         addButton = new JButton("Add Movie");
         editButton = new JButton("Edit Movie");
         deleteButton = new JButton("Delete Movie");
+        bookButton = new JButton("Book Movie");
+        bookingHistoryButton = new JButton("Booking History");
 
         styleButton(addButton);
         styleButton(editButton);
         styleButton(deleteButton);
+        styleButton(bookButton);
+        styleButton(bookingHistoryButton);
 
         buttonPanel.add(addButton);
         buttonPanel.add(editButton);
         buttonPanel.add(deleteButton);
+        buttonPanel.add(bookButton);
+        buttonPanel.add(bookingHistoryButton);
 
         centerPanel.add(scrollPane, BorderLayout.CENTER);
         centerPanel.add(buttonPanel, BorderLayout.SOUTH);
@@ -100,6 +111,8 @@ public class AdminDashboard extends JFrame {
         deleteButton.addActionListener(e -> deleteSelectedMovie());
         logoutButton.addActionListener(e -> logout());
         searchButton.addActionListener(e -> searchMovies());
+        bookButton.addActionListener(e -> bookSelectedMovie());
+        bookingHistoryButton.addActionListener(e -> showBookingHistory());
 
         add(mainPanel);
     }
@@ -125,9 +138,9 @@ public class AdminDashboard extends JFrame {
 
     private void addSampleData() {
         String[][] sampleData = {
-            {"1", "The Shawshank Redemption", "Drama", "2h 22m", "1994-09-23", "$9.99"},
-            {"2", "The Godfather", "Crime", "2h 55m", "1972-03-24", "$8.99"},
-            {"3", "The Dark Knight", "Action", "2h 32m", "2008-07-18", "$10.99"}
+            {"1", "The Shawshank Redemption", "Drama", "2h 22m", "1994-09-23", "$9.99", "Available"},
+            {"2", "The Godfather", "Crime", "2h 55m", "1972-03-24", "$8.99", "Available"},
+            {"3", "The Dark Knight", "Action", "2h 32m", "2008-07-18", "$10.99", "Available"}
         };
         
         for (String[] row : sampleData) {
@@ -174,7 +187,8 @@ public class AdminDashboard extends JFrame {
                 genreField.getText(),
                 durationField.getText(),
                 releaseDateField.getText(),
-                priceField.getText()
+                priceField.getText(),
+                "Available"
             };
             tableModel.addRow(newRow);
             dialog.dispose();
@@ -261,6 +275,60 @@ public class AdminDashboard extends JFrame {
             tableModel.removeRow(selectedRow);
         }
     }
+    
+    private void bookSelectedMovie() {
+        int selectedRow = movieTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a movie to book",
+                "No Selection", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        String movieTitle = tableModel.getValueAt(selectedRow, 1).toString();
+        String priceText = tableModel.getValueAt(selectedRow, 5).toString();
+        double price = Double.parseDouble(priceText.replace("$", ""));
+        
+        // Show seat selection dialog
+        SeatSelectionDialog seatDialog = new SeatSelectionDialog(this, movieTitle, price);
+        seatDialog.setVisible(true);
+        
+        if (seatDialog.isConfirmed() && !seatDialog.getSelectedSeats().isEmpty()) {
+            List<String> selectedSeats = seatDialog.getSelectedSeats();
+            double totalAmount = seatDialog.getTotalPrice();
+            
+            // Show payment dialog
+            PaymentDialog paymentDialog = new PaymentDialog(this, movieTitle, selectedSeats, totalAmount);
+            paymentDialog.setVisible(true);
+            
+            if (paymentDialog.isPaymentSuccessful()) {
+                // Update booked seats
+                if (bookedSeats == null) {
+                    bookedSeats = new ArrayList<>();
+                }
+                bookedSeats.addAll(selectedSeats);
+
+                // Check if all seats are booked
+                int totalSeats = seatDialog.getTotalSeats(); // Assume this method exists in SeatSelectionDialog
+                if (bookedSeats.size() >= totalSeats) {
+                    tableModel.setValueAt("Booked", selectedRow, 6); // Update status to "Booked"
+                } else {
+                    tableModel.setValueAt("Available", selectedRow, 6); // Update status to "Available"
+                }
+                
+                // Show success message
+                JOptionPane.showMessageDialog(this, 
+                    "Booking successful! Movie: " + movieTitle + "\nSeats: " + String.join(", ", selectedSeats) + 
+                    "\nTotal Amount: $" + String.format("%.2f", totalAmount),
+                    "Booking Success", 
+                    JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }
+    
+    private void showBookingHistory() {
+        BookingHistoryDialog historyDialog = new BookingHistoryDialog(this);
+        historyDialog.setVisible(true);
+    }
 
     private void searchMovies() {
         String searchText = searchField.getText().toLowerCase();
@@ -291,4 +359,4 @@ public class AdminDashboard extends JFrame {
             new AdminDashboard().setVisible(true);
         });
     }
-} 
+}

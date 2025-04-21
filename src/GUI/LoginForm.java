@@ -8,11 +8,10 @@ public class LoginForm extends JFrame {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
-    private JButton registerButton;
     private JLabel titleLabel;
 
     public LoginForm() {
-        setTitle("Movies Management System - Login");
+        setTitle("Movie Booking System - Admin Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 500);
         setLocationRelativeTo(null);
@@ -37,7 +36,7 @@ public class LoginForm extends JFrame {
         mainPanel.setLayout(new BorderLayout());
 
         // Title
-        titleLabel = new JLabel("Movies Management System", SwingConstants.CENTER);
+        titleLabel = new JLabel("Movie Booking System", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(50, 0, 30, 0));
@@ -53,7 +52,7 @@ public class LoginForm extends JFrame {
         gbc.insets = new Insets(5, 20, 5, 20);
 
         // Username field
-        JLabel usernameLabel = new JLabel("Username:");
+        JLabel usernameLabel = new JLabel("Admin Username:");
         usernameLabel.setForeground(Color.WHITE);
         usernameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         loginPanel.add(usernameLabel, gbc);
@@ -80,17 +79,12 @@ public class LoginForm extends JFrame {
         styleButton(loginButton);
         buttonPanel.add(loginButton);
 
-        registerButton = new JButton("Register");
-        styleButton(registerButton);
-        buttonPanel.add(registerButton);
-
         loginPanel.add(buttonPanel, gbc);
 
         mainPanel.add(loginPanel, BorderLayout.CENTER);
 
         // Add action listeners
         loginButton.addActionListener(e -> handleLogin());
-        registerButton.addActionListener(e -> openRegistration());
 
         add(mainPanel);
     }
@@ -127,34 +121,19 @@ public class LoginForm extends JFrame {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
 
-        // TODO: Implement login logic here
+        // Simple admin authentication
         if (username.equals("admin") && password.equals("admin")) {
             JOptionPane.showMessageDialog(this, "Login successful!");
             openAdminDashboard();
-        } else if (username.equals("customer") && password.equals("customer")) {
-            JOptionPane.showMessageDialog(this, "Login successful!");
-            openCustomerDashboard();
         } else {
             JOptionPane.showMessageDialog(this, "Invalid username or password!", 
                 "Login Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private void openRegistration() {
-        RegisterForm registerForm = new RegisterForm();
-        registerForm.setVisible(true);
-        this.dispose();
-    }
-
     private void openAdminDashboard() {
         AdminDashboard adminDashboard = new AdminDashboard();
         adminDashboard.setVisible(true);
-        this.dispose();
-    }
-
-    private void openCustomerDashboard() {
-        CustomerDashboard customerDashboard = new CustomerDashboard();
-        customerDashboard.setVisible(true);
         this.dispose();
     }
 
