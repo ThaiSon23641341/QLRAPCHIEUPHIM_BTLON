@@ -29,7 +29,7 @@ public class PaymentDialog extends JDialog {
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
         
-        // Create form panel
+        // form 
         JPanel formPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
@@ -89,7 +89,7 @@ public class PaymentDialog extends JDialog {
         
         formPanel.add(paymentPanel, gbc);
         
-        // Button panel
+        // Button pay
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         JButton payButton = new JButton("Pay Now");
         styleButton(payButton);
@@ -102,11 +102,11 @@ public class PaymentDialog extends JDialog {
         buttonPanel.add(payButton);
         buttonPanel.add(cancelButton);
         
-        // Add components to dialog
         add(formPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
     }
     
+    // css button 
     private void styleButton(JButton button) {
         button.setPreferredSize(new Dimension(120, 35));
         button.setFont(new Font("Arial", Font.BOLD, 14));
@@ -127,7 +127,7 @@ public class PaymentDialog extends JDialog {
     }
     
     private void processPayment() {
-        // Validate form fields
+        // Kiểm tra input 
         if (cardNumberField.getText().trim().isEmpty() || 
             cardHolderField.getText().trim().isEmpty() || 
             expiryDateField.getText().trim().isEmpty() || 
@@ -139,14 +139,13 @@ public class PaymentDialog extends JDialog {
                 JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
-        // Simulate payment processing
+
+        // Mô phỏng process thanh toán 
         JOptionPane.showMessageDialog(this, 
             "Processing payment...", 
             "Payment", 
             JOptionPane.INFORMATION_MESSAGE);
         
-        // Simulate successful payment
         paymentSuccessful = true;
         
         // Show success message
@@ -158,6 +157,7 @@ public class PaymentDialog extends JDialog {
         dispose();
     }
     
+    // kiểm tra trạng thái thanh toán 
     public boolean isPaymentSuccessful() {
         return paymentSuccessful;
     }

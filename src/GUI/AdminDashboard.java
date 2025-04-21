@@ -25,17 +25,17 @@ public class AdminDashboard extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        // Main panel
+        // Main
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(new Color(240, 240, 240));
 
-        // Top panel with search and logout
+        // Search và logout panel
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setBackground(new Color(51, 122, 183));
         topPanel.setPreferredSize(new Dimension(getWidth(), 60));
         topPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        // Search panel
+        // Search 
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         searchPanel.setOpaque(false);
         searchField = new JTextField(20);
@@ -52,7 +52,7 @@ public class AdminDashboard extends JFrame {
         topPanel.add(searchPanel, BorderLayout.WEST);
         topPanel.add(logoutButton, BorderLayout.EAST);
 
-        // Center panel with table
+        // center Panel
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.setBackground(Color.WHITE);
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -70,13 +70,13 @@ public class AdminDashboard extends JFrame {
         movieTable.getTableHeader().setReorderingAllowed(false);
         movieTable.setRowHeight(30);
         
-        // Add some sample data
+        // Thêm đa ta mẫu
         addSampleData();
 
         JScrollPane scrollPane = new JScrollPane(movieTable);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
-        // Button panel
+        // Buttons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         buttonPanel.setBackground(Color.WHITE);
 
@@ -101,11 +101,9 @@ public class AdminDashboard extends JFrame {
         centerPanel.add(scrollPane, BorderLayout.CENTER);
         centerPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-        // Add components to main panel
         mainPanel.add(topPanel, BorderLayout.NORTH);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
-        // Add action listeners
         addButton.addActionListener(e -> showAddMovieDialog());
         editButton.addActionListener(e -> showEditMovieDialog());
         deleteButton.addActionListener(e -> deleteSelectedMovie());
@@ -136,6 +134,7 @@ public class AdminDashboard extends JFrame {
         });
     }
 
+    // đa ta mẫu 
     private void addSampleData() {
         String[][] sampleData = {
             {"1", "The Shawshank Redemption", "Drama", "2h 22m", "1994-09-23", "$9.99", "Available"},
@@ -148,6 +147,7 @@ public class AdminDashboard extends JFrame {
         }
     }
 
+    // Dialog thêm phim 
     private void showAddMovieDialog() {
         JDialog dialog = new JDialog(this, "Add New Movie", true);
         dialog.setSize(400, 400);
@@ -202,6 +202,7 @@ public class AdminDashboard extends JFrame {
         dialog.setVisible(true);
     }
 
+    // chỉnh sửa phim 
     private void showEditMovieDialog() {
         int selectedRow = movieTable.getSelectedRow();
         if (selectedRow == -1) {
@@ -258,6 +259,7 @@ public class AdminDashboard extends JFrame {
         dialog.setVisible(true);
     }
 
+    // xóa phim 
     private void deleteSelectedMovie() {
         int selectedRow = movieTable.getSelectedRow();
         if (selectedRow == -1) {
@@ -288,7 +290,7 @@ public class AdminDashboard extends JFrame {
         String priceText = tableModel.getValueAt(selectedRow, 5).toString();
         double price = Double.parseDouble(priceText.replace("$", ""));
         
-        // Show seat selection dialog
+        // Hiển thị trang chọn ghế
         SeatSelectionDialog seatDialog = new SeatSelectionDialog(this, movieTitle, price);
         seatDialog.setVisible(true);
         
@@ -296,26 +298,25 @@ public class AdminDashboard extends JFrame {
             List<String> selectedSeats = seatDialog.getSelectedSeats();
             double totalAmount = seatDialog.getTotalPrice();
             
-            // Show payment dialog
+            // Hiển thị thanh toán
             PaymentDialog paymentDialog = new PaymentDialog(this, movieTitle, selectedSeats, totalAmount);
             paymentDialog.setVisible(true);
             
             if (paymentDialog.isPaymentSuccessful()) {
-                // Update booked seats
+                // Cập nhật ghế 
                 if (bookedSeats == null) {
                     bookedSeats = new ArrayList<>();
                 }
                 bookedSeats.addAll(selectedSeats);
 
-                // Check if all seats are booked
-                int totalSeats = seatDialog.getTotalSeats(); // Assume this method exists in SeatSelectionDialog
+                // Kiểm tra ghế trong phòng chiếu
+                int totalSeats = seatDialog.getTotalSeats(); 
                 if (bookedSeats.size() >= totalSeats) {
-                    tableModel.setValueAt("Booked", selectedRow, 6); // Update status to "Booked"
+                    tableModel.setValueAt("Booked", selectedRow, 6); 
                 } else {
-                    tableModel.setValueAt("Available", selectedRow, 6); // Update status to "Available"
+                    tableModel.setValueAt("Available", selectedRow, 6); 
                 }
                 
-                // Show success message
                 JOptionPane.showMessageDialog(this, 
                     "Booking successful! Movie: " + movieTitle + "\nSeats: " + String.join(", ", selectedSeats) + 
                     "\nTotal Amount: $" + String.format("%.2f", totalAmount),
@@ -325,11 +326,13 @@ public class AdminDashboard extends JFrame {
         }
     }
     
+    // hiển thị lịch sử booking
     private void showBookingHistory() {
         BookingHistoryDialog historyDialog = new BookingHistoryDialog(this);
         historyDialog.setVisible(true);
     }
 
+    // tìm kiếm phim
     private void searchMovies() {
         String searchText = searchField.getText().toLowerCase();
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
@@ -341,6 +344,7 @@ public class AdminDashboard extends JFrame {
         }
     }
 
+    // đăng xuất 
     private void logout() {
         int confirm = JOptionPane.showConfirmDialog(this,
             "Are you sure you want to logout?",

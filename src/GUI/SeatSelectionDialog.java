@@ -28,7 +28,7 @@ public class SeatSelectionDialog extends JDialog {
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
 
-        // Create screen panel
+        // Panel screen
         JPanel screenPanel = new JPanel();
         screenPanel.setBackground(new Color(200, 200, 200));
         screenPanel.setPreferredSize(new Dimension(getWidth(), 50));
@@ -37,11 +37,11 @@ public class SeatSelectionDialog extends JDialog {
         screenLabel.setFont(new Font("Arial", Font.BOLD, 20));
         screenPanel.add(screenLabel);
 
-        // Create seat panel
+        // seat panel
         seatPanel = new JPanel(new GridLayout(rows, cols, 5, 5));
         seatPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Create seat buttons
+        // seat
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 String seatNumber = (char) ('A' + i) + String.valueOf(j + 1);
@@ -51,7 +51,7 @@ public class SeatSelectionDialog extends JDialog {
                 seatButton.setForeground(Color.BLACK);
                 seatButton.setFocusPainted(false);
 
-                // Randomly mark some seats as booked (for demonstration)
+                // hiển thị những ghế đã được chọn mẫu
                 if (Math.random() < 0.2) {
                     seatButton.setBackground(Color.RED);
                     seatButton.setEnabled(false);
@@ -64,11 +64,11 @@ public class SeatSelectionDialog extends JDialog {
             }
         }
 
-        // Create info panel
+        // info panel
         JPanel infoPanel = new JPanel(new GridLayout(3, 1, 5, 5));
         infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        // Legend
+        // màu ghế cho mỗi status
         JPanel legendPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
         JPanel availableLegend = new JPanel();
         availableLegend.setBackground(Color.GREEN);
@@ -87,10 +87,10 @@ public class SeatSelectionDialog extends JDialog {
         legendPanel.add(new JLabel("Booked:"));
         legendPanel.add(bookedLegend);
 
-        // Selected seats label
+        // Label chọn ghế
         selectedSeatsLabel = new JLabel("Selected Seats: None");
 
-        // Total price label
+        // lable tổng giá
         totalPriceLabel = new JLabel("Total Price: $0.00");
 
         infoPanel.add(legendPanel);
@@ -111,13 +111,13 @@ public class SeatSelectionDialog extends JDialog {
         buttonPanel.add(confirmButton);
         buttonPanel.add(cancelButton);
 
-        // Add components to dialog
         add(screenPanel, BorderLayout.NORTH);
         add(seatPanel, BorderLayout.CENTER);
         add(infoPanel, BorderLayout.SOUTH);
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
+    // css button 
     private void styleButton(JButton button) {
         button.setPreferredSize(new Dimension(120, 35));
         button.setFont(new Font("Arial", Font.BOLD, 14));
@@ -138,18 +138,19 @@ public class SeatSelectionDialog extends JDialog {
         });
     }
 
+    // toggle chọn ghế 
     private void toggleSeatSelection(JButton seatButton, String seatNumber) {
         if (seatButton.getBackground() == Color.GREEN) {
-            // Select seat
+            // chọn
             seatButton.setBackground(Color.BLUE);
             selectedSeats.add(seatNumber);
         } else if (seatButton.getBackground() == Color.BLUE) {
-            // Deselect seat
+            // bỏ chọn
             seatButton.setBackground(Color.GREEN);
             selectedSeats.remove(seatNumber);
         }
 
-        // Update selected seats label
+        // Update ghế đã chọn
         if (selectedSeats.isEmpty()) {
             selectedSeatsLabel.setText("Selected Seats: None");
             confirmButton.setEnabled(false);
@@ -158,7 +159,7 @@ public class SeatSelectionDialog extends JDialog {
             confirmButton.setEnabled(true);
         }
 
-        // Update total price
+        // Update tổng giá
         double totalPrice = selectedSeats.size() * pricePerSeat;
         totalPriceLabel.setText(String.format("Total Price: $%.2f", totalPrice));
     }
