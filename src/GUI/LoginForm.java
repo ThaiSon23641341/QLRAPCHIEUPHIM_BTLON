@@ -42,7 +42,7 @@ public class LoginForm extends JFrame {
         titleLabel.setBorder(BorderFactory.createEmptyBorder(50, 0, 30, 0));
         mainPanel.add(titleLabel, BorderLayout.NORTH);
 
-        // Login panel
+        // Login 
         JPanel loginPanel = new JPanel();
         loginPanel.setOpaque(false);
         loginPanel.setLayout(new GridBagLayout());
@@ -51,7 +51,7 @@ public class LoginForm extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 20, 5, 20);
 
-        // Username field
+        // Username 
         JLabel usernameLabel = new JLabel("Admin Username:");
         usernameLabel.setForeground(Color.WHITE);
         usernameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -61,7 +61,7 @@ public class LoginForm extends JFrame {
         styleTextField(usernameField);
         loginPanel.add(usernameField, gbc);
 
-        // Password field
+        // Password 
         JLabel passwordLabel = new JLabel("Password:");
         passwordLabel.setForeground(Color.WHITE);
         passwordLabel.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -71,7 +71,7 @@ public class LoginForm extends JFrame {
         styleTextField(passwordField);
         loginPanel.add(passwordField, gbc);
 
-        // Buttons panel
+        // Buttons đăng kí
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
         buttonPanel.setOpaque(false);
 
@@ -121,7 +121,7 @@ public class LoginForm extends JFrame {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
 
-        // Simple admin authentication
+        // Xác thực admin
         if (username.equals("admin") && password.equals("admin")) {
             JOptionPane.showMessageDialog(this, "Login successful!");
             openAdminDashboard();
@@ -131,6 +131,7 @@ public class LoginForm extends JFrame {
         }
     }
 
+    // mở trang admin
     private void openAdminDashboard() {
         AdminDashboard adminDashboard = new AdminDashboard();
         adminDashboard.setVisible(true);

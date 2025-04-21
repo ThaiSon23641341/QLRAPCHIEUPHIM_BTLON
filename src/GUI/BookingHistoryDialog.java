@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import entity.Booking;
 
 public class BookingHistoryDialog extends JDialog {
     private JTable bookingTable;
@@ -21,10 +22,10 @@ public class BookingHistoryDialog extends JDialog {
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
         
-        // Initialize bookings list
+        // khởi tạo danh sách booking 
         bookings = new ArrayList<>();
         
-        // Create table
+        // Table
         String[] columns = {"Booking ID", "Movie", "Seats", "Date", "Amount", "Status"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
@@ -38,13 +39,13 @@ public class BookingHistoryDialog extends JDialog {
         bookingTable.getTableHeader().setReorderingAllowed(false);
         bookingTable.setRowHeight(30);
         
-        // Add sample data
+        // Thêm đa ta mẫu
         addSampleData();
         
         JScrollPane scrollPane = new JScrollPane(bookingTable);
         scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
-        // Create button panel
+        // Button xem chi tiết
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         
         JButton viewDetailsButton = new JButton("View Details");
@@ -58,11 +59,11 @@ public class BookingHistoryDialog extends JDialog {
         buttonPanel.add(viewDetailsButton);
         buttonPanel.add(closeButton);
         
-        // Add components to dialog
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
     }
     
+    // css button 
     private void styleButton(JButton button) {
         button.setPreferredSize(new Dimension(120, 35));
         button.setFont(new Font("Arial", Font.BOLD, 14));
@@ -83,7 +84,7 @@ public class BookingHistoryDialog extends JDialog {
     }
     
     private void addSampleData() {
-        // Add sample bookings
+        // thêm booking mẫu 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String currentDate = dateFormat.format(new Date());
         
@@ -159,29 +160,5 @@ public class BookingHistoryDialog extends JDialog {
         return null;
     }
     
-    // Inner class to represent a booking
-    private static class Booking {
-        private String id;
-        private String movie;
-        private String seats;
-        private String date;
-        private double amount;
-        private String status;
-        
-        public Booking(String id, String movie, String seats, String date, double amount, String status) {
-            this.id = id;
-            this.movie = movie;
-            this.seats = seats;
-            this.date = date;
-            this.amount = amount;
-            this.status = status;
-        }
-        
-        public String getId() { return id; }
-        public String getMovie() { return movie; }
-        public String getSeats() { return seats; }
-        public String getDate() { return date; }
-        public double getAmount() { return amount; }
-        public String getStatus() { return status; }
-    }
+    
 } 
