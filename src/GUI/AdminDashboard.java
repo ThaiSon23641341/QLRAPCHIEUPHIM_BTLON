@@ -40,13 +40,13 @@ public class AdminDashboard extends JFrame {
         searchPanel.setOpaque(false);
         searchField = new JTextField(20);
         searchField.setPreferredSize(new Dimension(200, 30));
-        JButton searchButton = new JButton("Search");
+        JButton searchButton = new JButton("Tìm kiếm");
         styleButton(searchButton);
         searchPanel.add(searchField);
         searchPanel.add(searchButton);
 
         // Logout button
-        logoutButton = new JButton("Logout");
+        logoutButton = new JButton("Đăng xuất");
         styleButton(logoutButton);
 
         topPanel.add(searchPanel, BorderLayout.WEST);
@@ -58,7 +58,7 @@ public class AdminDashboard extends JFrame {
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Table
-        String[] columns = {"ID", "Title", "Genre", "Duration", "Release Date", "Price", "Status"};
+        String[] columns = {"ID", "Tên Phim", "Thể Loại", "Thời Lượng", "Ngày Ra Mắt", "Giá Vé", "Trạng Thái"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -80,11 +80,11 @@ public class AdminDashboard extends JFrame {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         buttonPanel.setBackground(Color.WHITE);
 
-        addButton = new JButton("Add Movie");
-        editButton = new JButton("Edit Movie");
-        deleteButton = new JButton("Delete Movie");
-        bookButton = new JButton("Book Movie");
-        bookingHistoryButton = new JButton("Booking History");
+        addButton = new JButton("Thêm Phim");
+        editButton = new JButton("Sửa Phim");
+        deleteButton = new JButton("Xóa Phim");
+        bookButton = new JButton("Đặt Vé");
+        bookingHistoryButton = new JButton("Lịch Sử");
 
         styleButton(addButton);
         styleButton(editButton);
@@ -137,9 +137,9 @@ public class AdminDashboard extends JFrame {
     // đa ta mẫu 
     private void addSampleData() {
         String[][] sampleData = {
-            {"1", "The Shawshank Redemption", "Drama", "2h 22m", "1994-09-23", "$9.99", "Available"},
-            {"2", "The Godfather", "Crime", "2h 55m", "1972-03-24", "$8.99", "Available"},
-            {"3", "The Dark Knight", "Action", "2h 32m", "2008-07-18", "$10.99", "Available"}
+            {"1", "The Shawshank Redemption", "Hài Kịch", "2 giờ 22 phút", "1994-09-23", "$9.99", "Còn Chỗ"},
+            {"2", "The Godfather", "Tội Phạm", "2 giờ 55 phút", "1972-03-24", "$8.99", "Còn Chỗ"},
+            {"3", "The Dark Knight", "Hành Động", "2 giờ 32 phút", "2008-07-18", "$10.99", "Còn Chỗ"}
         };
         
         for (String[] row : sampleData) {
@@ -149,7 +149,7 @@ public class AdminDashboard extends JFrame {
 
     // Dialog thêm phim 
     private void showAddMovieDialog() {
-        JDialog dialog = new JDialog(this, "Add New Movie", true);
+        JDialog dialog = new JDialog(this, "Thêm Phim Mới", true);
         dialog.setSize(400, 400);
         dialog.setLocationRelativeTo(this);
         dialog.setLayout(new BorderLayout());
@@ -166,18 +166,18 @@ public class AdminDashboard extends JFrame {
         JTextField releaseDateField = new JTextField(20);
         JTextField priceField = new JTextField(20);
 
-        formPanel.add(new JLabel("Title:"), gbc);
+        formPanel.add(new JLabel("Tên Phim:"), gbc);
         formPanel.add(titleField, gbc);
-        formPanel.add(new JLabel("Genre:"), gbc);
+        formPanel.add(new JLabel("Thể Loại:"), gbc);
         formPanel.add(genreField, gbc);
-        formPanel.add(new JLabel("Duration:"), gbc);
+        formPanel.add(new JLabel("Thời Lượng:"), gbc);
         formPanel.add(durationField, gbc);
-        formPanel.add(new JLabel("Release Date:"), gbc);
+        formPanel.add(new JLabel("Ngày Ra Mắt:"), gbc);
         formPanel.add(releaseDateField, gbc);
-        formPanel.add(new JLabel("Price:"), gbc);
+        formPanel.add(new JLabel("Giá Vé:"), gbc);
         formPanel.add(priceField, gbc);
 
-        JButton saveButton = new JButton("Save");
+        JButton saveButton = new JButton("Lưu");
         styleButton(saveButton);
         saveButton.addActionListener(e -> {
             // TODO: Implement save logic
@@ -188,7 +188,7 @@ public class AdminDashboard extends JFrame {
                 durationField.getText(),
                 releaseDateField.getText(),
                 priceField.getText(),
-                "Available"
+                "Còn Chỗ"
             };
             tableModel.addRow(newRow);
             dialog.dispose();
@@ -206,12 +206,12 @@ public class AdminDashboard extends JFrame {
     private void showEditMovieDialog() {
         int selectedRow = movieTable.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a movie to edit",
-                "No Selection", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn phim để sửa",
+                "Không Có Lựa Chọn", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        JDialog dialog = new JDialog(this, "Edit Movie", true);
+        JDialog dialog = new JDialog(this, "Sửa Phim", true);
         dialog.setSize(400, 400);
         dialog.setLocationRelativeTo(this);
         dialog.setLayout(new BorderLayout());
@@ -228,18 +228,18 @@ public class AdminDashboard extends JFrame {
         JTextField releaseDateField = new JTextField(tableModel.getValueAt(selectedRow, 4).toString(), 20);
         JTextField priceField = new JTextField(tableModel.getValueAt(selectedRow, 5).toString(), 20);
 
-        formPanel.add(new JLabel("Title:"), gbc);
+        formPanel.add(new JLabel("Tên Phim:"), gbc);
         formPanel.add(titleField, gbc);
-        formPanel.add(new JLabel("Genre:"), gbc);
+        formPanel.add(new JLabel("Thể Loại:"), gbc);
         formPanel.add(genreField, gbc);
-        formPanel.add(new JLabel("Duration:"), gbc);
+        formPanel.add(new JLabel("Thời Lượng:"), gbc);
         formPanel.add(durationField, gbc);
-        formPanel.add(new JLabel("Release Date:"), gbc);
+        formPanel.add(new JLabel("Ngày Ra Mắt:"), gbc);
         formPanel.add(releaseDateField, gbc);
-        formPanel.add(new JLabel("Price:"), gbc);
+        formPanel.add(new JLabel("Giá Vé:"), gbc);
         formPanel.add(priceField, gbc);
 
-        JButton saveButton = new JButton("Save Changes");
+        JButton saveButton = new JButton("Lưu");
         styleButton(saveButton);
         saveButton.addActionListener(e -> {
             // TODO: Implement save changes logic
@@ -263,14 +263,14 @@ public class AdminDashboard extends JFrame {
     private void deleteSelectedMovie() {
         int selectedRow = movieTable.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a movie to delete",
-                "No Selection", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn phim để xóa",
+                "Không Có Lựa Chọn", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         int confirm = JOptionPane.showConfirmDialog(this,
-            "Are you sure you want to delete this movie?",
-            "Confirm Delete",
+            "Bạn có chắc chắn muốn xóa phim này?",
+            "Xác Nhận Xóa",
             JOptionPane.YES_NO_OPTION);
 
         if (confirm == JOptionPane.YES_OPTION) {
@@ -281,8 +281,8 @@ public class AdminDashboard extends JFrame {
     private void bookSelectedMovie() {
         int selectedRow = movieTable.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a movie to book",
-                "No Selection", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn phim để đặt vé",
+                "Không Có Lựa Chọn", JOptionPane.WARNING_MESSAGE);
             return;
         }
         
@@ -312,15 +312,15 @@ public class AdminDashboard extends JFrame {
                 // Kiểm tra ghế trong phòng chiếu
                 int totalSeats = seatDialog.getTotalSeats(); 
                 if (bookedSeats.size() >= totalSeats) {
-                    tableModel.setValueAt("Booked", selectedRow, 6); 
+                    tableModel.setValueAt("Đã Đặt", selectedRow, 6); 
                 } else {
-                    tableModel.setValueAt("Available", selectedRow, 6); 
+                    tableModel.setValueAt("Còn Chỗ", selectedRow, 6); 
                 }
                 
                 JOptionPane.showMessageDialog(this, 
-                    "Booking successful! Movie: " + movieTitle + "\nSeats: " + String.join(", ", selectedSeats) + 
-                    "\nTotal Amount: $" + String.format("%.2f", totalAmount),
-                    "Booking Success", 
+                    "Đặt Vé Thành Công! Phim: " + movieTitle + "\nGhế: " + String.join(", ", selectedSeats) + 
+                    "\nTổng Tiền: $" + String.format("%.2f", totalAmount),
+                    "Đặt Vé Thành Công", 
                     JOptionPane.INFORMATION_MESSAGE);
             }
         }
@@ -347,8 +347,8 @@ public class AdminDashboard extends JFrame {
     // đăng xuất 
     private void logout() {
         int confirm = JOptionPane.showConfirmDialog(this,
-            "Are you sure you want to logout?",
-            "Confirm Logout",
+            "Bạn có chắc chắn muốn đăng xuất?",
+            "Xác Nhận Đăng Xuất",
             JOptionPane.YES_NO_OPTION);
 
         if (confirm == JOptionPane.YES_OPTION) {

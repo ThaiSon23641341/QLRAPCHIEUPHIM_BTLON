@@ -6,21 +6,20 @@ import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class PaymentDialog extends JDialog {
-    private JTextField cardNumberField;
-    private JTextField cardHolderField;
-    private JTextField expiryDateField;
-    private JTextField cvvField;
+    private JTextField nameField;
+    private JTextField emailField;
+    private JRadioButton radioCash, radioCredit;
     private JLabel totalAmountLabel;
     private double totalAmount;
     private List<String> selectedSeats;
     private String movieTitle;
     private boolean paymentSuccessful = false;
-    private JRadioButton radioCash, radioCredit;
     
     public PaymentDialog(JFrame parent, String movieTitle, List<String> selectedSeats, double totalAmount) {
-        super(parent, "Payment for " + movieTitle, true);
+        super(parent, "Thanh Toán Cho " + movieTitle, true);
         this.movieTitle = movieTitle;
         this.selectedSeats = selectedSeats;
         this.totalAmount = totalAmount;
@@ -38,12 +37,12 @@ public class PaymentDialog extends JDialog {
         
         // Order summary
         JPanel summaryPanel = new JPanel(new GridLayout(4, 1, 5, 5));
-        summaryPanel.setBorder(BorderFactory.createTitledBorder("Order Summary"));
+        summaryPanel.setBorder(BorderFactory.createTitledBorder("Tóm Tắt Đơn Hàng"));
         
-        JLabel movieLabel = new JLabel("Movie: " + movieTitle);
-        JLabel seatsLabel = new JLabel("Seats: " + String.join(", ", selectedSeats));
-        JLabel dateLabel = new JLabel("Date: " + new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        totalAmountLabel = new JLabel(String.format("Total Amount: $%.2f", totalAmount));
+        JLabel movieLabel = new JLabel("Phim: " + movieTitle);
+        JLabel seatsLabel = new JLabel("Ghế: " + String.join(", ", selectedSeats));
+        JLabel dateLabel = new JLabel("Ngày: " + new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        totalAmountLabel = new JLabel(String.format("Tổng Tiền: $%.2f", totalAmount));
         
         summaryPanel.add(movieLabel);
         summaryPanel.add(seatsLabel);
@@ -54,31 +53,29 @@ public class PaymentDialog extends JDialog {
         
         // Payment form
         JPanel paymentPanel = new JPanel(new GridBagLayout());
-        paymentPanel.setBorder(BorderFactory.createTitledBorder("Informations"));
+        paymentPanel.setBorder(BorderFactory.createTitledBorder("Thông Tin Khách Hàng"));
         GridBagConstraints pgbc = new GridBagConstraints();
         pgbc.gridwidth = GridBagConstraints.REMAINDER;
         pgbc.fill = GridBagConstraints.HORIZONTAL;
         pgbc.insets = new Insets(5, 20, 5, 20);
         
-        cardNumberField = new JTextField(20);
-        cardHolderField = new JTextField(20);
-        expiryDateField = new JTextField(10);
-        cvvField = new JTextField(5);
+        nameField = new JTextField(20);
+        emailField = new JTextField(20);
         
-        paymentPanel.add(new JLabel("Customer Name:"), pgbc);
-        paymentPanel.add(cardNumberField, pgbc);
-        paymentPanel.add(new JLabel("email:"), pgbc);
-        paymentPanel.add(cardHolderField, pgbc);
+        paymentPanel.add(new JLabel("Họ Tên:"), pgbc);
+        paymentPanel.add(nameField, pgbc);
+        paymentPanel.add(new JLabel("Email:"), pgbc);
+        paymentPanel.add(emailField, pgbc);
 
-        radioCash = new JRadioButton("Cash");
-        radioCredit = new JRadioButton("Credit");
+        radioCash = new JRadioButton("Tiền Mặt");
+        radioCredit = new JRadioButton("Thẻ");
         ButtonGroup bg = new ButtonGroup();
         bg.add(radioCash);
         bg.add(radioCredit);
         
         JPanel paymentInfoPanel = new JPanel();
         JPanel paymentTitle = new JPanel();
-        paymentTitle.add(new JLabel("Payment Method:"));
+        paymentTitle.add(new JLabel("Phương Thức Thanh Toán:"));
         JPanel paymentMethodPanel = new JPanel();
         paymentMethodPanel.add(radioCash);
         paymentMethodPanel.add(radioCredit);
@@ -91,11 +88,11 @@ public class PaymentDialog extends JDialog {
         
         // Button pay
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        JButton payButton = new JButton("Pay Now");
+        JButton payButton = new JButton("Thanh Toán");
         styleButton(payButton);
         payButton.addActionListener(e -> processPayment());
         
-        JButton cancelButton = new JButton("Cancel");
+        JButton cancelButton = new JButton("Hủy");   
         styleButton(cancelButton);
         cancelButton.addActionListener(e -> dispose());
         
@@ -126,38 +123,77 @@ public class PaymentDialog extends JDialog {
         });
     }
     
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        return pattern.matcher(email).matches();
+    }
+    
+    private boolean isValidName(String name) {
+        return name != null && name.trim().length() >= 2 && name.matches("^[\\p{L} .'-]+$");
+    }
+    
     private void processPayment() {
+        String name = nameField.getText().trim();
+        String email = emailField.getText().trim();
+        
         // Kiểm tra input 
-        if (cardNumberField.getText().trim().isEmpty() || 
-            cardHolderField.getText().trim().isEmpty() || 
-            expiryDateField.getText().trim().isEmpty() || 
-            cvvField.getText().trim().isEmpty()) {
-            
+        if (name.isEmpty()) {
             JOptionPane.showMessageDialog(this, 
-                "Please fill in all payment details", 
-                "Validation Error", 
+                "Vui lòng nhập họ tên", 
+                "Lỗi Kiểm Tra", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        if (!isValidName(name)) {
+            JOptionPane.showMessageDialog(this, 
+                "Họ tên không hợp lệ. Vui lòng nhập họ tên đúng định dạng", 
+                "Lỗi Kiểm Tra", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        if (email.isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "Vui lòng nhập email", 
+                "Lỗi Kiểm Tra", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        if (!isValidEmail(email)) {
+            JOptionPane.showMessageDialog(this, 
+                "Email không hợp lệ. Vui lòng nhập email đúng định dạng", 
+                "Lỗi Kiểm Tra", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        if (!radioCash.isSelected() && !radioCredit.isSelected()) {
+            JOptionPane.showMessageDialog(this, 
+                "Vui lòng chọn phương thức thanh toán", 
+                "Lỗi Kiểm Tra", 
                 JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         // Mô phỏng process thanh toán 
         JOptionPane.showMessageDialog(this, 
-            "Processing payment...", 
-            "Payment", 
+            "Đang xử lý thanh toán...", 
+            "Thanh Toán", 
             JOptionPane.INFORMATION_MESSAGE);
         
         paymentSuccessful = true;
         
-        // Show success message
         JOptionPane.showMessageDialog(this, 
-            "Payment successful! Your booking has been confirmed.", 
-            "Payment Success", 
+            "Thanh Toán Thành Công! Đơn Hàng Của Bạn Đã Được Xác Nhận.", 
+            "Thanh Toán Thành Công", 
             JOptionPane.INFORMATION_MESSAGE);
         
         dispose();
     }
     
-    // kiểm tra trạng thái thanh toán 
     public boolean isPaymentSuccessful() {
         return paymentSuccessful;
     }

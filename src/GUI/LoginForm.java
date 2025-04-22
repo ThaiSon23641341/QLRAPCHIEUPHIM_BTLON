@@ -52,7 +52,7 @@ public class LoginForm extends JFrame {
         gbc.insets = new Insets(5, 20, 5, 20);
 
         // Username 
-        JLabel usernameLabel = new JLabel("Admin Username:");
+        JLabel usernameLabel = new JLabel("Tên Tài Khoản:");
         usernameLabel.setForeground(Color.WHITE);
         usernameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         loginPanel.add(usernameLabel, gbc);
@@ -62,7 +62,7 @@ public class LoginForm extends JFrame {
         loginPanel.add(usernameField, gbc);
 
         // Password 
-        JLabel passwordLabel = new JLabel("Password:");
+        JLabel passwordLabel = new JLabel("Mật Khẩu:");
         passwordLabel.setForeground(Color.WHITE);
         passwordLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         loginPanel.add(passwordLabel, gbc);
@@ -75,7 +75,7 @@ public class LoginForm extends JFrame {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
         buttonPanel.setOpaque(false);
 
-        loginButton = new JButton("Login");
+        loginButton = new JButton("Đăng Nhập");
         styleButton(loginButton);
         buttonPanel.add(loginButton);
 
@@ -123,11 +123,11 @@ public class LoginForm extends JFrame {
 
         // Xác thực admin
         if (username.equals("admin") && password.equals("admin")) {
-            JOptionPane.showMessageDialog(this, "Login successful!");
+            JOptionPane.showMessageDialog(this, "Đăng Nhập Thành Công!");
             openAdminDashboard();
         } else {
-            JOptionPane.showMessageDialog(this, "Invalid username or password!", 
-                "Login Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Tên Tài Khoản Hoặc Mật Khẩu Không Chính Xác!", 
+                "Lỗi Đăng Nhập", JOptionPane.ERROR_MESSAGE);
         }
     }
 

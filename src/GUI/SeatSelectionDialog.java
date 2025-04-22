@@ -19,7 +19,7 @@ public class SeatSelectionDialog extends JDialog {
     private boolean confirmed = false;
 
     public SeatSelectionDialog(JFrame parent, String movieTitle, double pricePerSeat) {
-        super(parent, "Select Seats for " + movieTitle, true);
+        super(parent, "Chọn Ghế Cho " + movieTitle, true);
         this.pricePerSeat = pricePerSeat;
         this.selectedSeats = new ArrayList<>();
         this.seatButtons = new ArrayList<>();
@@ -80,18 +80,18 @@ public class SeatSelectionDialog extends JDialog {
         bookedLegend.setBackground(Color.RED);
         bookedLegend.setPreferredSize(new Dimension(20, 20));
 
-        legendPanel.add(new JLabel("Available:"));
+        legendPanel.add(new JLabel("Còn Chỗ:"));
         legendPanel.add(availableLegend);
-        legendPanel.add(new JLabel("Selected:"));
+        legendPanel.add(new JLabel("Đã Chọn:"));
         legendPanel.add(selectedLegend);
-        legendPanel.add(new JLabel("Booked:"));
+        legendPanel.add(new JLabel("Đã Đặt:"));
         legendPanel.add(bookedLegend);
 
         // Label chọn ghế
-        selectedSeatsLabel = new JLabel("Selected Seats: None");
+        selectedSeatsLabel = new JLabel("Đã Chọn: None");
 
         // lable tổng giá
-        totalPriceLabel = new JLabel("Total Price: $0.00");
+        totalPriceLabel = new JLabel("Tổng Tiền: $0.00");
 
         infoPanel.add(legendPanel);
         infoPanel.add(selectedSeatsLabel);
@@ -99,12 +99,12 @@ public class SeatSelectionDialog extends JDialog {
 
         // Create button panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        confirmButton = new JButton("Confirm Booking");
+        confirmButton = new JButton("Xác Nhận");
         confirmButton.setEnabled(false);
         styleButton(confirmButton);
         confirmButton.addActionListener(e -> confirmBooking());
 
-        JButton cancelButton = new JButton("Cancel");
+        JButton cancelButton = new JButton("Hủy");
         styleButton(cancelButton);
         cancelButton.addActionListener(e -> dispose());
 
@@ -152,16 +152,16 @@ public class SeatSelectionDialog extends JDialog {
 
         // Update ghế đã chọn
         if (selectedSeats.isEmpty()) {
-            selectedSeatsLabel.setText("Selected Seats: None");
+            selectedSeatsLabel.setText("Đã Chọn: None");
             confirmButton.setEnabled(false);
         } else {
-            selectedSeatsLabel.setText("Selected Seats: " + String.join(", ", selectedSeats));
+            selectedSeatsLabel.setText("Đã Chọn: " + String.join(", ", selectedSeats));
             confirmButton.setEnabled(true);
         }
 
         // Update tổng giá
         double totalPrice = selectedSeats.size() * pricePerSeat;
-        totalPriceLabel.setText(String.format("Total Price: $%.2f", totalPrice));
+        totalPriceLabel.setText(String.format("Tổng Tiền: $%.2f", totalPrice));
     }
 
     private void confirmBooking() {
