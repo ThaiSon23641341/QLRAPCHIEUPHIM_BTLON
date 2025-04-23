@@ -23,11 +23,14 @@ public class SeatSelectionDialog extends JDialog {
         this.pricePerSeat = pricePerSeat;
         this.selectedSeats = new ArrayList<>();
         this.seatButtons = new ArrayList<>();
-
+    
         setSize(800, 600);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
-
+    
+        // === NEW: Tạo JPanel chính ===
+        JPanel seatSelector = new JPanel(new BorderLayout());
+    
         // Panel screen
         JPanel screenPanel = new JPanel();
         screenPanel.setBackground(new Color(200, 200, 200));
@@ -36,12 +39,11 @@ public class SeatSelectionDialog extends JDialog {
         JLabel screenLabel = new JLabel("SCREEN");
         screenLabel.setFont(new Font("Arial", Font.BOLD, 20));
         screenPanel.add(screenLabel);
-
+    
         // seat panel
         seatPanel = new JPanel(new GridLayout(rows, cols, 5, 5));
         seatPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-
-        // seat
+    
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 String seatNumber = (char) ('A' + i) + String.valueOf(j + 1);
@@ -50,25 +52,23 @@ public class SeatSelectionDialog extends JDialog {
                 seatButton.setBackground(Color.GREEN);
                 seatButton.setForeground(Color.BLACK);
                 seatButton.setFocusPainted(false);
-
-                // hiển thị những ghế đã được chọn mẫu
+    
                 if (Math.random() < 0.2) {
                     seatButton.setBackground(Color.RED);
                     seatButton.setEnabled(false);
                 } else {
                     seatButton.addActionListener(e -> toggleSeatSelection(seatButton, seatNumber));
                 }
-
+    
                 seatPanel.add(seatButton);
                 seatButtons.add(seatButton);
             }
         }
-
-        // info panel
+    
+        // Info panel
         JPanel infoPanel = new JPanel(new GridLayout(3, 1, 5, 5));
         infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-
-        // màu ghế cho mỗi status
+    
         JPanel legendPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
         JPanel availableLegend = new JPanel();
         availableLegend.setBackground(Color.GREEN);
@@ -79,42 +79,88 @@ public class SeatSelectionDialog extends JDialog {
         JPanel bookedLegend = new JPanel();
         bookedLegend.setBackground(Color.RED);
         bookedLegend.setPreferredSize(new Dimension(20, 20));
-
+    
         legendPanel.add(new JLabel("Còn Chỗ:"));
         legendPanel.add(availableLegend);
         legendPanel.add(new JLabel("Đã Chọn:"));
         legendPanel.add(selectedLegend);
         legendPanel.add(new JLabel("Đã Đặt:"));
         legendPanel.add(bookedLegend);
-
-        // Label chọn ghế
+    
         selectedSeatsLabel = new JLabel("Đã Chọn: None");
-
-        // lable tổng giá
         totalPriceLabel = new JLabel("Tổng Tiền: $0.00");
-
+    
         infoPanel.add(legendPanel);
         infoPanel.add(selectedSeatsLabel);
         infoPanel.add(totalPriceLabel);
-
-        // Create button panel
+    
+        // Button panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         confirmButton = new JButton("Xác Nhận");
         confirmButton.setEnabled(false);
         styleButton(confirmButton);
         confirmButton.addActionListener(e -> confirmBooking());
-
+    
         JButton cancelButton = new JButton("Hủy");
         styleButton(cancelButton);
         cancelButton.addActionListener(e -> dispose());
-
+    
         buttonPanel.add(confirmButton);
         buttonPanel.add(cancelButton);
+    
+        // === Add các thành phần vào seatSelector ===
+        seatSelector.add(screenPanel, BorderLayout.NORTH);
+        seatSelector.add(seatPanel, BorderLayout.CENTER);
+    
+        // Tạo một panel chứa info + button để bỏ xuống SOUTH
+        JPanel southPanel = new JPanel(new BorderLayout());
+        southPanel.add(infoPanel, BorderLayout.CENTER);
+        southPanel.add(buttonPanel, BorderLayout.SOUTH);
+        // Phần west
+        JPanel movieInfoPanel = new JPanel();
+        movieInfoPanel.setPreferredSize(new Dimension(200, 0));
+        movieInfoPanel.setLayout(new BoxLayout(movieInfoPanel, BoxLayout.Y_AXIS));
+        movieInfoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 10));
+    
+        JTextArea titleArea = new JTextArea("🎬 Phim: " + movieTitle);
+        titleArea.setWrapStyleWord(true);
+        titleArea.setLineWrap(true);
+        titleArea.setEditable(false);
+        titleArea.setFocusable(false);
+        titleArea.setOpaque(false);
+        titleArea.setBorder(null);
+        titleArea.setAlignmentX(Component.LEFT_ALIGNMENT);
+        titleArea.setFont(new Font("Arial", Font.BOLD, 16));
 
-        add(screenPanel, BorderLayout.NORTH);
-        add(seatPanel, BorderLayout.CENTER);
-        add(infoPanel, BorderLayout.SOUTH);
-        add(buttonPanel, BorderLayout.SOUTH);
+        JComboBox<String> dichVu = new JComboBox<>(new String[] {
+            "Nước Ngọt",
+            "Bỏng Ngô",
+            "Kẹo Bông Gòn",
+            "Nước Ép",
+            "Snack"
+        });
+        dichVu.setPreferredSize(new Dimension(150, 60));
+        dichVu.setFont(new Font("Arial", Font.PLAIN, 14));
+        dichVu.setAlignmentX(Component.LEFT_ALIGNMENT);
+        dichVu.setBorder(BorderFactory.createTitledBorder("Chọn Dịch Vụ: "));
+        dichVu.setFocusable(false);
+
+
+        movieInfoPanel.add(titleArea);
+        movieInfoPanel.add(Box.createVerticalStrut(10));
+        movieInfoPanel.add(dichVu);
+        
+        
+        movieInfoPanel.add(Box.createVerticalStrut(10));
+        movieInfoPanel.add(Box.createVerticalStrut(10));
+    
+    
+        seatSelector.add(southPanel, BorderLayout.SOUTH);
+
+    
+        // === Cuối cùng add seatSelector vào JDialog ===
+        add(seatSelector, BorderLayout.CENTER);
+        add(movieInfoPanel, BorderLayout.WEST);
     }
 
     // css button 
