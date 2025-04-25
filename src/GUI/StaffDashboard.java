@@ -1,6 +1,7 @@
 package GUI;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -17,7 +18,7 @@ public class StaffDashboard extends JFrame {
     private List<String> bookedSeats;
 
     public StaffDashboard() {
-        setTitle("Movie Booking System - Staff Dashboard");
+        setTitle("Rạp Phim STD - Trang Nhân Viên");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 600);
         setLocationRelativeTo(null);
@@ -32,9 +33,10 @@ public class StaffDashboard extends JFrame {
         topPanel.setBackground(new Color(51, 122, 183));
         topPanel.setPreferredSize(new Dimension(getWidth(), 60));
         topPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-
+        
         // Search 
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        searchPanel.setOpaque(false);
         searchField = new JTextField(20);
         searchField.setPreferredSize(new Dimension(200, 30));
         JButton searchButton = new JButton("Tìm kiếm");
@@ -42,11 +44,18 @@ public class StaffDashboard extends JFrame {
         searchPanel.add(searchField);
         searchPanel.add(searchButton);
 
+        // title
+        JLabel titleLable = new JLabel("Nhân viên");
+        titleLable.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLable.setForeground(Color.WHITE);
+        titleLable.setBorder(new EmptyBorder(0, 160, 0, 0));
+
         // Logout button
         logoutButton = new JButton("Đăng xuất");
         styleButton(logoutButton);
 
         topPanel.add(searchPanel, BorderLayout.WEST);
+        topPanel.add(titleLable, BorderLayout.CENTER);
         topPanel.add(logoutButton, BorderLayout.EAST);
 
         // center Panel

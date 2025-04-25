@@ -13,7 +13,7 @@ public class LoginForm extends JFrame {
     private BufferedImage backgroundImage;
 
     public LoginForm() {
-        setTitle("Movie Booking System - Admin Login");
+        setTitle("Rạp Phim STD - Trang Đăng Nhập");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 500);
         setLocationRelativeTo(null);
