@@ -24,7 +24,7 @@ public class SeatSelectionDialog extends JDialog {
         this.selectedSeats = new ArrayList<>();
         this.seatButtons = new ArrayList<>();
     
-        setSize(800, 600);
+        setSize(1000, 600);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
     

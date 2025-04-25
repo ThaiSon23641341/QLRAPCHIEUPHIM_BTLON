@@ -16,7 +16,7 @@ public class BookingHistoryDialog extends JDialog {
     private List<Booking> bookings;
     
     public BookingHistoryDialog(JFrame parent) {
-        super(parent, "Booking History", true);
+        super(parent, "Lịch sử đặt phim", true);
         
         setSize(800, 500);
         setLocationRelativeTo(parent);
