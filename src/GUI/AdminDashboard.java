@@ -1,22 +1,19 @@
 package GUI;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class AdminDashboard extends JFrame {
     private JTable movieTable;
     private DefaultTableModel tableModel;
     private JTextField searchField;
-    private JButton addButton, editButton, deleteButton, logoutButton, bookButton, bookingHistoryButton;
-    private List<String> bookedSeats;
+    private JButton addButton, editButton, deleteButton, logoutButton, bookingHistoryButton;
 
     public AdminDashboard() {
         setTitle("Movies Management System - Admin Dashboard");
@@ -37,7 +34,6 @@ public class AdminDashboard extends JFrame {
 
         // Search 
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        searchPanel.setOpaque(false);
         searchField = new JTextField(20);
         searchField.setPreferredSize(new Dimension(200, 30));
         JButton searchButton = new JButton("Tìm kiếm");
@@ -45,11 +41,18 @@ public class AdminDashboard extends JFrame {
         searchPanel.add(searchField);
         searchPanel.add(searchButton);
 
+        // title 
+        JLabel titleLable = new JLabel("Quản trị viên");
+        titleLable.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLable.setForeground(Color.WHITE);
+        titleLable.setBorder(new EmptyBorder(0, 130, 0, 0));
+
         // Logout button
         logoutButton = new JButton("Đăng xuất");
         styleButton(logoutButton);
 
         topPanel.add(searchPanel, BorderLayout.WEST);
+        topPanel.add(titleLable, BorderLayout.CENTER);
         topPanel.add(logoutButton, BorderLayout.EAST);
 
         // center Panel
@@ -58,7 +61,7 @@ public class AdminDashboard extends JFrame {
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Table
-        String[] columns = {"ID", "Tên Phim", "Thể Loại", "Thời Lượng", "Ngày Ra Mắt", "Giá Vé", "Trạng Thái"};
+        String[] columns = {"ID", "Tên Phim", "Thể Loại", "Thời Lượng", "Suất Chiếu", "Giá Vé", "Trạng Thái"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -83,19 +86,16 @@ public class AdminDashboard extends JFrame {
         addButton = new JButton("Thêm Phim");
         editButton = new JButton("Sửa Phim");
         deleteButton = new JButton("Xóa Phim");
-        bookButton = new JButton("Đặt Vé");
         bookingHistoryButton = new JButton("Lịch Sử");
 
         styleButton(addButton);
         styleButton(editButton);
         styleButton(deleteButton);
-        styleButton(bookButton);
         styleButton(bookingHistoryButton);
 
         buttonPanel.add(addButton);
         buttonPanel.add(editButton);
         buttonPanel.add(deleteButton);
-        buttonPanel.add(bookButton);
         buttonPanel.add(bookingHistoryButton);
 
         centerPanel.add(scrollPane, BorderLayout.CENTER);
@@ -109,7 +109,6 @@ public class AdminDashboard extends JFrame {
         deleteButton.addActionListener(e -> deleteSelectedMovie());
         logoutButton.addActionListener(e -> logout());
         searchButton.addActionListener(e -> searchMovies());
-        bookButton.addActionListener(e -> bookSelectedMovie());
         bookingHistoryButton.addActionListener(e -> showBookingHistory());
 
         add(mainPanel);
@@ -137,9 +136,9 @@ public class AdminDashboard extends JFrame {
     // đa ta mẫu 
     private void addSampleData() {
         String[][] sampleData = {
-            {"1", "The Shawshank Redemption", "Hài Kịch", "2 giờ 22 phút", "1994-09-23", "$9.99", "Còn Chỗ"},
-            {"2", "The Godfather", "Tội Phạm", "2 giờ 55 phút", "1972-03-24", "$8.99", "Còn Chỗ"},
-            {"3", "The Dark Knight", "Hành Động", "2 giờ 32 phút", "2008-07-18", "$10.99", "Còn Chỗ"}
+            {"1", "The Shawshank Redemption", "Hài Kịch", "2 giờ 22 phút", "19:00 - 21:22", "$9.99", "Còn Chỗ"},
+            {"2", "The Godfather", "Tội Phạm", "2 giờ 55 phút", "20:00 - 22:55", "$8.99", "Còn Chỗ"},
+            {"3", "The Dark Knight", "Hành Động", "2 giờ 32 phút", "21:00 - 23:32", "$10.99", "Còn Chỗ"}
         };
         
         for (String[] row : sampleData) {
@@ -163,7 +162,7 @@ public class AdminDashboard extends JFrame {
         JTextField titleField = new JTextField(20);
         JTextField genreField = new JTextField(20);
         JTextField durationField = new JTextField(20);
-        JTextField releaseDateField = new JTextField(20);
+        JTextField showtimeField = new JTextField(20);
         JTextField priceField = new JTextField(20);
 
         formPanel.add(new JLabel("Tên Phim:"), gbc);
@@ -172,21 +171,20 @@ public class AdminDashboard extends JFrame {
         formPanel.add(genreField, gbc);
         formPanel.add(new JLabel("Thời Lượng:"), gbc);
         formPanel.add(durationField, gbc);
-        formPanel.add(new JLabel("Ngày Ra Mắt:"), gbc);
-        formPanel.add(releaseDateField, gbc);
+        formPanel.add(new JLabel("Suất Chiếu:"), gbc);
+        formPanel.add(showtimeField, gbc);
         formPanel.add(new JLabel("Giá Vé:"), gbc);
         formPanel.add(priceField, gbc);
 
         JButton saveButton = new JButton("Lưu");
         styleButton(saveButton);
         saveButton.addActionListener(e -> {
-            // TODO: Implement save logic
             String[] newRow = {
                 String.valueOf(tableModel.getRowCount() + 1),
                 titleField.getText(),
                 genreField.getText(),
                 durationField.getText(),
-                releaseDateField.getText(),
+                showtimeField.getText(),
                 priceField.getText(),
                 "Còn Chỗ"
             };
@@ -225,7 +223,7 @@ public class AdminDashboard extends JFrame {
         JTextField titleField = new JTextField(tableModel.getValueAt(selectedRow, 1).toString(), 20);
         JTextField genreField = new JTextField(tableModel.getValueAt(selectedRow, 2).toString(), 20);
         JTextField durationField = new JTextField(tableModel.getValueAt(selectedRow, 3).toString(), 20);
-        JTextField releaseDateField = new JTextField(tableModel.getValueAt(selectedRow, 4).toString(), 20);
+        JTextField showtimeField = new JTextField(tableModel.getValueAt(selectedRow, 4).toString(), 20);
         JTextField priceField = new JTextField(tableModel.getValueAt(selectedRow, 5).toString(), 20);
 
         formPanel.add(new JLabel("Tên Phim:"), gbc);
@@ -234,19 +232,18 @@ public class AdminDashboard extends JFrame {
         formPanel.add(genreField, gbc);
         formPanel.add(new JLabel("Thời Lượng:"), gbc);
         formPanel.add(durationField, gbc);
-        formPanel.add(new JLabel("Ngày Ra Mắt:"), gbc);
-        formPanel.add(releaseDateField, gbc);
+        formPanel.add(new JLabel("Suất Chiếu:"), gbc);
+        formPanel.add(showtimeField, gbc);
         formPanel.add(new JLabel("Giá Vé:"), gbc);
         formPanel.add(priceField, gbc);
 
         JButton saveButton = new JButton("Lưu");
         styleButton(saveButton);
         saveButton.addActionListener(e -> {
-            // TODO: Implement save changes logic
             tableModel.setValueAt(titleField.getText(), selectedRow, 1);
             tableModel.setValueAt(genreField.getText(), selectedRow, 2);
             tableModel.setValueAt(durationField.getText(), selectedRow, 3);
-            tableModel.setValueAt(releaseDateField.getText(), selectedRow, 4);
+            tableModel.setValueAt(showtimeField.getText(), selectedRow, 4);
             tableModel.setValueAt(priceField.getText(), selectedRow, 5);
             dialog.dispose();
         });
@@ -278,53 +275,6 @@ public class AdminDashboard extends JFrame {
         }
     }
     
-    private void bookSelectedMovie() {
-        int selectedRow = movieTable.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn phim để đặt vé",
-                "Không Có Lựa Chọn", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        String movieTitle = tableModel.getValueAt(selectedRow, 1).toString();
-        String priceText = tableModel.getValueAt(selectedRow, 5).toString();
-        double price = Double.parseDouble(priceText.replace("$", ""));
-        
-        // Hiển thị trang chọn ghế
-        SeatSelectionDialog seatDialog = new SeatSelectionDialog(this, movieTitle, price);
-        seatDialog.setVisible(true);
-        
-        if (seatDialog.isConfirmed() && !seatDialog.getSelectedSeats().isEmpty()) {
-            List<String> selectedSeats = seatDialog.getSelectedSeats();
-            double totalAmount = seatDialog.getTotalPrice();
-            
-            // Hiển thị thanh toán
-            PaymentDialog paymentDialog = new PaymentDialog(this, movieTitle, selectedSeats, totalAmount);
-            paymentDialog.setVisible(true);
-            
-            if (paymentDialog.isPaymentSuccessful()) {
-                // Cập nhật ghế 
-                if (bookedSeats == null) {
-                    bookedSeats = new ArrayList<>();
-                }
-                bookedSeats.addAll(selectedSeats);
-
-                // Kiểm tra ghế trong phòng chiếu
-                int totalSeats = seatDialog.getTotalSeats(); 
-                if (bookedSeats.size() >= totalSeats) {
-                    tableModel.setValueAt("Đã Đặt", selectedRow, 6); 
-                } else {
-                    tableModel.setValueAt("Còn Chỗ", selectedRow, 6); 
-                }
-                
-                JOptionPane.showMessageDialog(this, 
-                    "Đặt Vé Thành Công! Phim: " + movieTitle + "\nGhế: " + String.join(", ", selectedSeats) + 
-                    "\nTổng Tiền: $" + String.format("%.2f", totalAmount),
-                    "Đặt Vé Thành Công", 
-                    JOptionPane.INFORMATION_MESSAGE);
-            }
-        }
-    }
     
     // hiển thị lịch sử booking
     private void showBookingHistory() {

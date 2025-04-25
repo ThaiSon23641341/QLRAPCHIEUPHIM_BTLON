@@ -3,12 +3,14 @@ package GUI;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 
 public class LoginForm extends JFrame {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
     private JLabel titleLabel;
+    private BufferedImage backgroundImage;
 
     public LoginForm() {
         setTitle("Movie Booking System - Admin Login");
@@ -17,7 +19,7 @@ public class LoginForm extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        // Main panel with gradient background
+        // Main 
         JPanel mainPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -26,8 +28,15 @@ public class LoginForm extends JFrame {
                 g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
                 int w = getWidth();
                 int h = getHeight();
-                Color color1 = new Color(66, 139, 202);
-                Color color2 = new Color(51, 122, 183);
+
+                // Draw background image if available
+                if (backgroundImage != null) {
+                    g2d.drawImage(backgroundImage, 0, 0, w, h, null);
+                }
+
+                // Add gradient overlay for better text visibility
+                Color color1 = new Color(66, 139, 202, 180);
+                Color color2 = new Color(51, 122, 183, 180);
                 GradientPaint gp = new GradientPaint(0, 0, color1, w, h, color2);
                 g2d.setPaint(gp);
                 g2d.fillRect(0, 0, w, h);
@@ -36,7 +45,7 @@ public class LoginForm extends JFrame {
         mainPanel.setLayout(new BorderLayout());
 
         // Title
-        titleLabel = new JLabel("Movie Booking System", SwingConstants.CENTER);
+        titleLabel = new JLabel("Rạp Phim STD", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(50, 0, 30, 0));
@@ -125,7 +134,12 @@ public class LoginForm extends JFrame {
         if (username.equals("admin") && password.equals("admin")) {
             JOptionPane.showMessageDialog(this, "Đăng Nhập Thành Công!");
             openAdminDashboard();
-        } else {
+        } 
+        else if (username.equals("staff") && password.equals("staff")) {
+            JOptionPane.showMessageDialog(this, "Đăng Nhập Thành Công!");
+            openStaffDashboard();
+        }
+        else {
             JOptionPane.showMessageDialog(this, "Tên Tài Khoản Hoặc Mật Khẩu Không Chính Xác!", 
                 "Lỗi Đăng Nhập", JOptionPane.ERROR_MESSAGE);
         }
@@ -135,6 +149,13 @@ public class LoginForm extends JFrame {
     private void openAdminDashboard() {
         AdminDashboard adminDashboard = new AdminDashboard();
         adminDashboard.setVisible(true);
+        this.dispose();
+    }
+
+    // mở trang staff 
+    private void openStaffDashboard() {
+        StaffDashboard staffDashboard = new StaffDashboard();
+        staffDashboard.setVisible(true);
         this.dispose();
     }
 

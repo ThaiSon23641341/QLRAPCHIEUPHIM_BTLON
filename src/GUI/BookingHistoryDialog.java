@@ -88,13 +88,17 @@ public class BookingHistoryDialog extends JDialog {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String currentDate = dateFormat.format(new Date());
         
-        addBooking("B001", "The Shawshank Redemption", "A1, A2, A3", currentDate, 29.97, "Đã Hoàn Tất");
-        addBooking("B002", "The Godfather", "B5, B6", currentDate, 17.98, "Đã Hoàn Tất");
-        addBooking("B003", "The Dark Knight", "C1, C2, C3, C4", currentDate, 43.96, "Đang Chờ");
+        addBooking("B001", "The Shawshank Redemption", "A1, A2, A3", currentDate, 29.97, "Đã Hoàn Tất",
+                  "Nguyễn Văn A", "nguyenvana@email.com", "Tiền Mặt");
+        addBooking("B002", "The Godfather", "B5, B6", currentDate, 17.98, "Đã Hoàn Tất",
+                  "Trần Thị B", "tranthib@email.com", "Thẻ");
+        addBooking("B003", "The Dark Knight", "C1, C2, C3, C4", currentDate, 43.96, "Đang Chờ",
+                  "Lê Văn C", "levanc@email.com", "Tiền Mặt");
     }
     
-    private void addBooking(String id, String movie, String seats, String date, double amount, String status) {
-        Booking booking = new Booking(id, movie, seats, date, amount, status);
+    private void addBooking(String id, String movie, String seats, String date, double amount, String status,
+                           String customerName, String customerEmail, String paymentMethod) {
+        Booking booking = new Booking(id, movie, seats, date, amount, status, customerName, customerEmail, paymentMethod);
         bookings.add(booking);
         
         String[] row = {
@@ -124,19 +128,25 @@ public class BookingHistoryDialog extends JDialog {
         
         if (booking != null) {
             JDialog detailsDialog = new JDialog(this, "Chi Tiết Đơn Đặt Hàng", true);
-            detailsDialog.setSize(400, 300);
+            detailsDialog.setSize(400, 400);
             detailsDialog.setLocationRelativeTo(this);
             detailsDialog.setLayout(new BorderLayout());
             
-            JPanel detailsPanel = new JPanel(new GridLayout(6, 1, 5, 5));
+            JPanel detailsPanel = new JPanel(new GridLayout(9, 1, 5, 5));
             detailsPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
             
+            // Thông tin đơn hàng
             detailsPanel.add(new JLabel("Mã Đơn Đặt Hàng: " + booking.getId()));
             detailsPanel.add(new JLabel("Phim: " + booking.getMovie()));
             detailsPanel.add(new JLabel("Ghế: " + booking.getSeats()));
             detailsPanel.add(new JLabel("Ngày: " + booking.getDate()));
             detailsPanel.add(new JLabel(String.format("Tổng Tiền: $%.2f", booking.getAmount())));
             detailsPanel.add(new JLabel("Trạng Thái: " + booking.getStatus()));
+            
+            // Thông tin khách hàng
+            detailsPanel.add(new JLabel("Tên Khách Hàng: " + booking.getCustomerName()));
+            detailsPanel.add(new JLabel("Email: " + booking.getCustomerEmail()));
+            detailsPanel.add(new JLabel("Phương Thức Thanh Toán: " + booking.getPaymentMethod()));
             
             JButton closeButton = new JButton("Đóng");
             styleButton(closeButton);
