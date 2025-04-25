@@ -14,6 +14,7 @@ public class PaymentDialog extends JDialog {
     private JRadioButton radioCash, radioCredit;
     private JLabel totalAmountLabel;
     private double totalAmount;
+    private double servicePrice = 0.0; 
     private List<String> selectedSeats;
     private String movieTitle;
     private boolean paymentSuccessful = false;
@@ -197,4 +198,10 @@ public class PaymentDialog extends JDialog {
     public boolean isPaymentSuccessful() {
         return paymentSuccessful;
     }
-} 
+
+    public void updateTotalAmount(double servicePrice) {
+        this.servicePrice = servicePrice;
+        double updatedTotal = totalAmount + servicePrice;
+        totalAmountLabel.setText(String.format("Tổng Tiền: $%.2f", updatedTotal));
+    }
+}
