@@ -139,7 +139,7 @@ public class SeatSelectionDialog extends JDialog {
         titleArea.add(new JLabel("Tên phim: " + movieTitle));
 
         JPanel durationArea = new JPanel();
-        durationArea.add(new JLabel("Giờ chiếu:  " + durationText));
+        durationArea.add(new JLabel("Suất chiếu:  " + durationText));
 
         JPanel gioChieuArea = new JPanel();
         gioChieuArea.add(new JLabel("Thời lượng: " + gioChieu));
