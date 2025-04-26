@@ -127,9 +127,9 @@ public class StaffDashboard extends JFrame {
     // đa ta mẫu
     private void addSampleData() {
         String[][] sampleData = {
-                { "1", "The Shawshank Redemption", "Hài Kịch", "2 giờ 22 phút", "1994-09-23", "$9.99", "Còn Chỗ" },
-                { "2", "The Godfather", "Tội Phạm", "2 giờ 55 phút", "1972-03-24", "$8.99", "Còn Chỗ" },
-                { "3", "The Dark Knight", "Hành Động", "2 giờ 32 phút", "2008-07-18", "$10.99", "Còn Chỗ" }
+                { "1", "The Shawshank Redemption", "Hài Kịch", "2 giờ 22 phút", "19:00 - 21:22", "$9.99", "Còn Chỗ" },
+                { "2", "The Godfather", "Tội Phạm", "2 giờ 55 phút", "20:00 - 22:55", "$8.99", "Còn Chỗ" },
+                { "3", "The Dark Knight", "Hành Động", "2 giờ 32 phút", "21:00 - 23:32", "$10.99", "Còn Chỗ" }
         };
 
         for (String[] row : sampleData) {
