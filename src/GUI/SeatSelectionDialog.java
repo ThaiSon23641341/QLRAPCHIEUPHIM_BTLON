@@ -17,12 +17,14 @@ public class SeatSelectionDialog extends JDialog {
     private int cols = 10;
     private JButton confirmButton;
     private boolean confirmed = false;
+    private String ImgPath = "/resources/image.png"; 
 
-    public SeatSelectionDialog(JFrame parent, String movieTitle, double pricePerSeat) {
+    public SeatSelectionDialog(JFrame parent, String movieTitle, double pricePerSeat, String gioChieu, String durationText) {
         super(parent, "Chọn Ghế Cho " + movieTitle, true);
         this.pricePerSeat = pricePerSeat;
         this.selectedSeats = new ArrayList<>();
         this.seatButtons = new ArrayList<>();
+        getContentPane().setBackground(Color.WHITE);
     
         setSize(1000, 600);
         setLocationRelativeTo(parent);
@@ -39,7 +41,6 @@ public class SeatSelectionDialog extends JDialog {
         JLabel screenLabel = new JLabel("SCREEN");
         screenLabel.setFont(new Font("Arial", Font.BOLD, 20));
         screenPanel.add(screenLabel);
-    
         // seat panel
         seatPanel = new JPanel(new GridLayout(rows, cols, 5, 5));
         seatPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -121,40 +122,59 @@ public class SeatSelectionDialog extends JDialog {
         movieInfoPanel.setPreferredSize(new Dimension(200, 0));
         movieInfoPanel.setLayout(new BoxLayout(movieInfoPanel, BoxLayout.Y_AXIS));
         movieInfoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 10));
+        movieInfoPanel.setPreferredSize(new Dimension(300, 0));
+        movieInfoPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        movieInfoPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
+        JPanel thongTinPhim = new JPanel(); 
+        thongTinPhim.setLayout(new BoxLayout(thongTinPhim, BoxLayout.Y_AXIS));
     
-        JTextArea titleArea = new JTextArea("🎬 Phim: " + movieTitle);
-        titleArea.setWrapStyleWord(true);
-        titleArea.setLineWrap(true);
-        titleArea.setEditable(false);
-        titleArea.setFocusable(false);
-        titleArea.setOpaque(false);
-        titleArea.setBorder(null);
+
+        ImageIcon originalIcon = new ImageIcon(getClass().getResource(ImgPath));
+        Image scaledImage = originalIcon.getImage().getScaledInstance(200, 310, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(scaledImage);
+        JLabel movieImage = new JLabel(resizedIcon);
+        movieImage.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JTextArea titleArea = new JTextArea("Tên phim: " + movieTitle) ;
         titleArea.setAlignmentX(Component.LEFT_ALIGNMENT);
-        titleArea.setFont(new Font("Arial", Font.BOLD, 16));
-
-        JComboBox<String> dichVu = new JComboBox<>(new String[] {
-            "Nước Ngọt",
-            "Bỏng Ngô",
-            "Kẹo Bông Gòn",
-            "Nước Ép",
-            "Snack"
-        });
-        dichVu.setPreferredSize(new Dimension(150, 60));
-        dichVu.setFont(new Font("Arial", Font.PLAIN, 14));
-        dichVu.setAlignmentX(Component.LEFT_ALIGNMENT);
-        dichVu.setBorder(BorderFactory.createTitledBorder("Chọn Dịch Vụ: "));
-        dichVu.setFocusable(false);
 
 
-        movieInfoPanel.add(titleArea);
-        movieInfoPanel.add(Box.createVerticalStrut(10));
-        movieInfoPanel.add(dichVu);
+        JTextArea durationArea = new JTextArea("Giờ chiếu:  "+ durationText);
+        durationArea.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JTextArea gioChieuArea = new JTextArea("Thời lượng: " + gioChieu);
+        gioChieuArea.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         
+
         
-        movieInfoPanel.add(Box.createVerticalStrut(10));
-        movieInfoPanel.add(Box.createVerticalStrut(10));
-    
-    
+
+        JPanel dichVu = new JPanel();
+        dichVu.setLayout(new GridLayout(3,1));
+        
+
+       JTextField popcorn = new JTextField("0"); 
+       popcorn.setBorder(BorderFactory.createTitledBorder("Bắp Rang (2$): "));
+        popcorn.setPreferredSize(new Dimension(50, 50));
+        JTextField drink = new JTextField("0"); 
+       drink.setBorder(BorderFactory.createTitledBorder("Nước ngọt (1$): "));
+        drink.setPreferredSize(new Dimension(50, 50));
+
+        dichVu.add(popcorn);
+        dichVu.add(drink);
+
+
+        thongTinPhim.add(titleArea) ; 
+        
+        thongTinPhim.add(movieImage) ;
+        thongTinPhim.add(durationArea) ;
+        thongTinPhim.add(gioChieuArea) ;
+        thongTinPhim.add(Box.createHorizontalStrut(20)); // khoảng cách giữa title và ảnh
+        thongTinPhim.add(new JLabel("Đánh gía: 5/5")) ;
+        movieInfoPanel.add(Box.createVerticalStrut(30)); // khoảng cách giữa title và ảnh
+        thongTinPhim.add(dichVu);
+
+        movieInfoPanel.add(thongTinPhim);
         seatSelector.add(southPanel, BorderLayout.SOUTH);
 
     
