@@ -34,21 +34,20 @@ public class LoginForm extends JFrame {
                     g2d.drawImage(backgroundImage, 0, 0, w, h, null);
                 }
 
-                // Add gradient overlay for better text visibility
-                Color color1 = new Color(66, 139, 202, 180);
-                Color color2 = new Color(51, 122, 183, 180);
-                GradientPaint gp = new GradientPaint(0, 0, color1, w, h, color2);
-                g2d.setPaint(gp);
-                g2d.fillRect(0, 0, w, h);
             }
         };
         mainPanel.setLayout(new BorderLayout());
+        try {
+            backgroundImage = javax.imageio.ImageIO.read(getClass().getResource("/resources/LoginBackGround.jpg"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // Title
         titleLabel = new JLabel("Rạp Phim STD", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
         titleLabel.setForeground(Color.WHITE);
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(50, 0, 30, 0));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(150, 0, 30, 0));
         mainPanel.add(titleLabel, BorderLayout.NORTH);
 
         // Login
@@ -61,7 +60,7 @@ public class LoginForm extends JFrame {
         gbc.insets = new Insets(5, 20, 5, 20);
 
         // Username
-        JLabel usernameLabel = new JLabel("Tên Tài Khoản:");
+        JLabel usernameLabel = new JLabel("<html>&#128100;&nbsp;Tên&nbsp;Tài&nbsp;Khoản&nbsp;:&nbsp;</html>");
         usernameLabel.setForeground(Color.WHITE);
         usernameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         loginPanel.add(usernameLabel, gbc);
@@ -71,7 +70,7 @@ public class LoginForm extends JFrame {
         loginPanel.add(usernameField, gbc);
 
         // Password
-        JLabel passwordLabel = new JLabel("Mật Khẩu:");
+        JLabel passwordLabel = new JLabel("<html>&#128273;&nbsp;Mật&nbsp;Khẩu&nbsp;:&nbsp;</html>");
         passwordLabel.setForeground(Color.WHITE);
         passwordLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         loginPanel.add(passwordLabel, gbc);
