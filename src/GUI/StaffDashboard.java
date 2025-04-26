@@ -146,10 +146,12 @@ public class StaffDashboard extends JFrame {
         
         String movieTitle = tableModel.getValueAt(selectedRow, 1).toString();
         String priceText = tableModel.getValueAt(selectedRow, 5).toString();
+        String durationText = tableModel.getValueAt(selectedRow, 3).toString();
+        String gioChieu = tableModel.getValueAt(selectedRow, 4).toString();
         double price = Double.parseDouble(priceText.replace("$", ""));
         
         // Hiển thị trang chọn ghế
-        SeatSelectionDialog seatDialog = new SeatSelectionDialog(this, movieTitle, price);
+        SeatSelectionDialog seatDialog = new SeatSelectionDialog(this, movieTitle, price, durationText, gioChieu);
         seatDialog.setVisible(true);
         
         if (seatDialog.isConfirmed() && !seatDialog.getSelectedSeats().isEmpty()) {
