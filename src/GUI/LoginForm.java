@@ -19,7 +19,7 @@ public class LoginForm extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        // Main 
+        // Main
         JPanel mainPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -51,7 +51,7 @@ public class LoginForm extends JFrame {
         titleLabel.setBorder(BorderFactory.createEmptyBorder(50, 0, 30, 0));
         mainPanel.add(titleLabel, BorderLayout.NORTH);
 
-        // Login 
+        // Login
         JPanel loginPanel = new JPanel();
         loginPanel.setOpaque(false);
         loginPanel.setLayout(new GridBagLayout());
@@ -60,7 +60,7 @@ public class LoginForm extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 20, 5, 20);
 
-        // Username 
+        // Username
         JLabel usernameLabel = new JLabel("Tên Tài Khoản:");
         usernameLabel.setForeground(Color.WHITE);
         usernameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -70,7 +70,7 @@ public class LoginForm extends JFrame {
         styleTextField(usernameField);
         loginPanel.add(usernameField, gbc);
 
-        // Password 
+        // Password
         JLabel passwordLabel = new JLabel("Mật Khẩu:");
         passwordLabel.setForeground(Color.WHITE);
         passwordLabel.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -102,9 +102,8 @@ public class LoginForm extends JFrame {
         textField.setPreferredSize(new Dimension(300, 35));
         textField.setFont(new Font("Arial", Font.PLAIN, 14));
         textField.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(200, 200, 200)),
-            BorderFactory.createEmptyBorder(5, 5, 5, 5)
-        ));
+                BorderFactory.createLineBorder(new Color(200, 200, 200)),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
     }
 
     private void styleButton(JButton button) {
@@ -120,6 +119,7 @@ public class LoginForm extends JFrame {
             public void mouseEntered(MouseEvent e) {
                 button.setBackground(new Color(40, 96, 144));
             }
+
             public void mouseExited(MouseEvent e) {
                 button.setBackground(new Color(51, 122, 183));
             }
@@ -134,14 +134,12 @@ public class LoginForm extends JFrame {
         if (username.equals("admin") && password.equals("admin")) {
             JOptionPane.showMessageDialog(this, "Đăng Nhập Thành Công!");
             openAdminDashboard();
-        } 
-        else if (username.equals("staff") && password.equals("staff")) {
+        } else if (username.equals("staff") && password.equals("staff")) {
             JOptionPane.showMessageDialog(this, "Đăng Nhập Thành Công!");
             openStaffDashboard();
-        }
-        else {
-            JOptionPane.showMessageDialog(this, "Tên Tài Khoản Hoặc Mật Khẩu Không Chính Xác!", 
-                "Lỗi Đăng Nhập", JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Tên Tài Khoản Hoặc Mật Khẩu Không Chính Xác!",
+                    "Lỗi Đăng Nhập", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -152,7 +150,7 @@ public class LoginForm extends JFrame {
         this.dispose();
     }
 
-    // mở trang staff 
+    // mở trang staff
     private void openStaffDashboard() {
         StaffDashboard staffDashboard = new StaffDashboard();
         staffDashboard.setVisible(true);
@@ -160,8 +158,8 @@ public class LoginForm extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new LoginForm().setVisible(true);
-        });
+
+        new LoginForm().setVisible(true);
+
     }
-} 
+}

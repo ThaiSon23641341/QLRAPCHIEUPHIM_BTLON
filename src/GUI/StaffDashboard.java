@@ -33,8 +33,8 @@ public class StaffDashboard extends JFrame {
         topPanel.setBackground(new Color(51, 122, 183));
         topPanel.setPreferredSize(new Dimension(getWidth(), 60));
         topPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        
-        // Search 
+
+        // Search
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         searchPanel.setOpaque(false);
         searchField = new JTextField(20);
@@ -64,7 +64,7 @@ public class StaffDashboard extends JFrame {
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Table
-        String[] columns = {"ID", "Tên Phim", "Thể Loại", "Thời Lượng", "Suất Chiếu", "Giá Vé", "Trạng Thái"};
+        String[] columns = { "ID", "Tên Phim", "Thể Loại", "Thời Lượng", "Suất Chiếu", "Giá Vé", "Trạng Thái" };
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -75,7 +75,7 @@ public class StaffDashboard extends JFrame {
         movieTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         movieTable.getTableHeader().setReorderingAllowed(false);
         movieTable.setRowHeight(30);
-        
+
         // Thêm đa ta mẫu
         addSampleData();
 
@@ -117,75 +117,76 @@ public class StaffDashboard extends JFrame {
             public void mouseEntered(MouseEvent e) {
                 button.setBackground(new Color(40, 96, 144));
             }
+
             public void mouseExited(MouseEvent e) {
                 button.setBackground(new Color(51, 122, 183));
             }
         });
     }
 
-    // đa ta mẫu 
+    // đa ta mẫu
     private void addSampleData() {
         String[][] sampleData = {
-            {"1", "The Shawshank Redemption", "Hài Kịch", "2 giờ 22 phút", "1994-09-23", "$9.99", "Còn Chỗ"},
-            {"2", "The Godfather", "Tội Phạm", "2 giờ 55 phút", "1972-03-24", "$8.99", "Còn Chỗ"},
-            {"3", "The Dark Knight", "Hành Động", "2 giờ 32 phút", "2008-07-18", "$10.99", "Còn Chỗ"}
+                { "1", "The Shawshank Redemption", "Hài Kịch", "2 giờ 22 phút", "1994-09-23", "$9.99", "Còn Chỗ" },
+                { "2", "The Godfather", "Tội Phạm", "2 giờ 55 phút", "1972-03-24", "$8.99", "Còn Chỗ" },
+                { "3", "The Dark Knight", "Hành Động", "2 giờ 32 phút", "2008-07-18", "$10.99", "Còn Chỗ" }
         };
-        
+
         for (String[] row : sampleData) {
             tableModel.addRow(row);
         }
     }
-    
+
     private void bookSelectedMovie() {
         int selectedRow = movieTable.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn phim để đặt vé",
-                "Không Có Lựa Chọn", JOptionPane.WARNING_MESSAGE);
+                    "Không Có Lựa Chọn", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
+
         String movieTitle = tableModel.getValueAt(selectedRow, 1).toString();
         String priceText = tableModel.getValueAt(selectedRow, 5).toString();
         String durationText = tableModel.getValueAt(selectedRow, 3).toString();
         String gioChieu = tableModel.getValueAt(selectedRow, 4).toString();
         double price = Double.parseDouble(priceText.replace("$", ""));
-        
+
         // Hiển thị trang chọn ghế
         SeatSelectionDialog seatDialog = new SeatSelectionDialog(this, movieTitle, price, durationText, gioChieu);
         seatDialog.setVisible(true);
-        
+
         if (seatDialog.isConfirmed() && !seatDialog.getSelectedSeats().isEmpty()) {
             List<String> selectedSeats = seatDialog.getSelectedSeats();
             double totalAmount = seatDialog.getTotalPrice();
-            
+
             // Hiển thị thanh toán
             PaymentDialog paymentDialog = new PaymentDialog(this, movieTitle, selectedSeats, totalAmount);
             paymentDialog.setVisible(true);
-            
+
             if (paymentDialog.isPaymentSuccessful()) {
-                // Cập nhật ghế 
+                // Cập nhật ghế
                 if (bookedSeats == null) {
                     bookedSeats = new ArrayList<>();
                 }
                 bookedSeats.addAll(selectedSeats);
 
                 // Kiểm tra ghế trong phòng chiếu
-                int totalSeats = seatDialog.getTotalSeats(); 
+                int totalSeats = seatDialog.getTotalSeats();
                 if (bookedSeats.size() >= totalSeats) {
-                    tableModel.setValueAt("Đã Đặt", selectedRow, 6); 
+                    tableModel.setValueAt("Đã Đặt", selectedRow, 6);
                 } else {
-                    tableModel.setValueAt("Còn Chỗ", selectedRow, 6); 
+                    tableModel.setValueAt("Còn Chỗ", selectedRow, 6);
                 }
-                
-                JOptionPane.showMessageDialog(this, 
-                    "Đặt Vé Thành Công! Phim: " + movieTitle + "\nGhế: " + String.join(", ", selectedSeats) + 
-                    "\nTổng Tiền: $" + String.format("%.2f", totalAmount),
-                    "Đặt Vé Thành Công", 
-                    JOptionPane.INFORMATION_MESSAGE);
+
+                JOptionPane.showMessageDialog(this,
+                        "Đặt Vé Thành Công! Phim: " + movieTitle + "\nGhế: " + String.join(", ", selectedSeats) +
+                                "\nTổng Tiền: $" + String.format("%.2f", totalAmount),
+                        "Đặt Vé Thành Công",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }
-    
+
     // tìm kiếm phim
     private void searchMovies() {
         String searchText = searchField.getText().toLowerCase();
@@ -198,12 +199,12 @@ public class StaffDashboard extends JFrame {
         }
     }
 
-    // đăng xuất 
+    // đăng xuất
     private void logout() {
         int confirm = JOptionPane.showConfirmDialog(this,
-            "Bạn có chắc chắn muốn đăng xuất?",
-            "Xác Nhận Đăng Xuất",
-            JOptionPane.YES_NO_OPTION);
+                "Bạn có chắc chắn muốn đăng xuất?",
+                "Xác Nhận Đăng Xuất",
+                JOptionPane.YES_NO_OPTION);
 
         if (confirm == JOptionPane.YES_OPTION) {
             LoginForm loginForm = new LoginForm();
@@ -213,8 +214,8 @@ public class StaffDashboard extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new StaffDashboard().setVisible(true);
-        });
+
+        new StaffDashboard().setVisible(true);
+
     }
 }

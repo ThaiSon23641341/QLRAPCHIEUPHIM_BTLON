@@ -310,8 +310,8 @@ public class AdminDashboard extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new AdminDashboard().setVisible(true);
-        });
+
+        new AdminDashboard().setVisible(true);
+
     }
 }
