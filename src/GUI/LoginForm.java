@@ -31,7 +31,7 @@ public class LoginForm extends JFrame {
 
                 // Draw background image if available
                 if (backgroundImage != null) {
-                    g2d.drawImage(backgroundImage, 0, 0, w, h, null);
+                    g2d.drawImage(backgroundImage, 0, 5, w, h, null);
                 }
 
             }
@@ -63,20 +63,24 @@ public class LoginForm extends JFrame {
         JLabel usernameLabel = new JLabel("<html>&#128100;&nbsp;Tên&nbsp;Tài&nbsp;Khoản&nbsp;:&nbsp;</html>");
         usernameLabel.setForeground(Color.WHITE);
         usernameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        gbc.insets = new Insets(5, 20, -10, 20); 
         loginPanel.add(usernameLabel, gbc);
 
         usernameField = new JTextField(20);
         styleTextField(usernameField);
+        gbc.insets = new Insets(0, 20, 5, 20);
         loginPanel.add(usernameField, gbc);
 
         // Password
         JLabel passwordLabel = new JLabel("<html>&#128273;&nbsp;Mật&nbsp;Khẩu&nbsp;:&nbsp;</html>");
         passwordLabel.setForeground(Color.WHITE);
         passwordLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        gbc.insets = new Insets(10, 20, -10, 20);
         loginPanel.add(passwordLabel, gbc);
 
         passwordField = new JPasswordField(20);
         styleTextField(passwordField);
+        gbc.insets = new Insets(0, 20, 10, 20);
         loginPanel.add(passwordField, gbc);
 
         // Buttons đăng kí
@@ -86,7 +90,7 @@ public class LoginForm extends JFrame {
         loginButton = new JButton("Đăng Nhập");
         styleButton(loginButton);
         buttonPanel.add(loginButton);
-
+        gbc.insets = new Insets(5, 20, 5, 20);
         loginPanel.add(buttonPanel, gbc);
 
         mainPanel.add(loginPanel, BorderLayout.CENTER);
