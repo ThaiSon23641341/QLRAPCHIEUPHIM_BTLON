@@ -1,6 +1,10 @@
 package GUI;
 
 import javax.swing.*;
+
+import entity.Ghe;
+import entity.SuatChieu;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -20,9 +24,10 @@ public class SeatSelectionDialog extends JDialog {
     private String ImgPath = "/resources/image.png";
     private JTextField popcorn; // Declare popcorn as an instance variable
     private JTextField drink;   // Declare drink as an instance variable
+	private JPanel seatSelector;
 
     public SeatSelectionDialog(JFrame parent, String movieTitle, double pricePerSeat, String gioChieu,
-            String durationText) {
+            String durationText,String newpath, SuatChieu suatchieu) {
         super(parent, "Chọn Ghế Cho " + movieTitle, true);
         this.pricePerSeat = pricePerSeat;
         this.selectedSeats = new ArrayList<>();
@@ -32,9 +37,14 @@ public class SeatSelectionDialog extends JDialog {
         setSize(1000, 600);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
+        
+        
+        // Thay bằng đường dẫn mới
+        ImgPath = newpath;
+  
 
         // === NEW: Tạo JPanel chính ===
-        JPanel seatSelector = new JPanel(new BorderLayout());
+         seatSelector = new JPanel(new BorderLayout());
 
         // Panel screen
         JPanel screenPanel = new JPanel();
@@ -48,26 +58,58 @@ public class SeatSelectionDialog extends JDialog {
         seatPanel = new JPanel(new GridLayout(rows, cols, 5, 5));
         seatPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
+        // for phát sinh cũ 
+//        for (int i = 0; i < rows; i++) {
+//            for (int j = 0; j < cols; j++) {
+//                String seatNumber = (char) ('A' + i) + String.valueOf(j + 1);
+//                JButton seatButton = new JButton(seatNumber);
+//                seatButton.setPreferredSize(new Dimension(60, 40));
+//                seatButton.setBackground(Color.GREEN);
+//                seatButton.setForeground(Color.BLACK);
+//                seatButton.setFocusPainted(false);
+//
+//                if (Math.random() < 0.2) {
+//                    seatButton.setBackground(Color.RED);
+//                    seatButton.setEnabled(false);
+//                } else {
+//                    seatButton.addActionListener(e -> toggleSeatSelection(seatButton, seatNumber));
+//                }
+//
+//                seatPanel.add(seatButton);
+//                seatButtons.add(seatButton);
+//            }
+//        }
+        
+        
+        // phát sinh mới 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                String seatNumber = (char) ('A' + i) + String.valueOf(j + 1);
+                // Tạo mã ghế với định dạng A01, A02, ..., A10, B01, ..., H10
+                String seatNumber = (char) ('A' + i) + String.format("%02d", j + 1);  // Sử dụng String.format để đảm bảo định dạng "A01", "A02", ..., "A10"
+
                 JButton seatButton = new JButton(seatNumber);
                 seatButton.setPreferredSize(new Dimension(60, 40));
                 seatButton.setBackground(Color.GREEN);
                 seatButton.setForeground(Color.BLACK);
                 seatButton.setFocusPainted(false);
 
+                // Đặt màu đỏ và không cho phép chọn nếu ghế đã được đặt
                 if (Math.random() < 0.2) {
                     seatButton.setBackground(Color.RED);
                     seatButton.setEnabled(false);
                 } else {
+                    // Thêm hành động khi ghế được chọn
                     seatButton.addActionListener(e -> toggleSeatSelection(seatButton, seatNumber));
                 }
 
+                // Thêm ghế vào bảng
                 seatPanel.add(seatButton);
                 seatButtons.add(seatButton);
             }
         }
+        
+        //Gọi phương thức gán lại giá trị
+        displaySeats(suatchieu.getDsGhe());
 
         // Info panel
         JPanel infoPanel = new JPanel(new GridLayout(3, 1, 0, 5));
@@ -128,6 +170,7 @@ public class SeatSelectionDialog extends JDialog {
         movieInfoPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
         JPanel thongTinPhim = new JPanel();
         thongTinPhim.setLayout(new BoxLayout(thongTinPhim, BoxLayout.Y_AXIS));
+        
 
         ImageIcon originalIcon = new ImageIcon(getClass().getResource(ImgPath));
         Image scaledImage = originalIcon.getImage().getScaledInstance(200, 310, Image.SCALE_SMOOTH);
@@ -181,7 +224,40 @@ public class SeatSelectionDialog extends JDialog {
         add(movieInfoPanel, BorderLayout.WEST);
     }
 
-    // css button
+    
+    //Phương thức ráng giá trị mới cho ghế ở database
+    private void displaySeats(List<Ghe> danhSachGhe) {
+        // Lặp qua danh sách các ghế và cập nhật trạng thái của từng ghế
+        for (Ghe ghe : danhSachGhe) {
+        	
+//        	lấy 3 ký tự cuối 
+        	String seatNumber = ghe.getMaGhe().substring(ghe.getMaGhe().length() - 3);
+        	
+        	
+            String trangThai = ghe.getTrangthaiGhe();  // Trạng thái ghế (Trống, Đã chọn, Đã đặt)
+      
+            	System.out.print( trangThai + ' ');
+         
+            // Tìm nút ghế tương ứng với mã ghế
+            for (JButton seatButton : seatButtons) {
+                if (seatButton.getText().equals(seatNumber)) {
+                    if ("Trống".equals(trangThai)) {
+                        seatButton.setBackground(Color.GREEN);
+                        seatButton.setEnabled(true);
+                    } else if ("Đã chọn".equals(trangThai)) {
+                        seatButton.setBackground(Color.BLUE);
+                        seatButton.setEnabled(true);
+                    } else if ("Đã đặt".equals(trangThai)) {
+                        seatButton.setBackground(Color.RED);
+                        seatButton.setEnabled(false);
+                    }
+                    break;  // Thoát khỏi vòng lặp khi tìm được ghế
+                }
+            }
+        }
+    }
+
+	// css button
     private void styleButton(JButton button) {
         button.setPreferredSize(new Dimension(120, 35));
         button.setFont(new Font("Arial", Font.BOLD, 14));

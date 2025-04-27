@@ -11,7 +11,7 @@ public class Ghe {
 		this("", "", "");
 	}
 	
-	public Ghe(String maSuatChieu, String maGhe, String trangthaiGhe) {
+	public Ghe(String maGhe, String maSuatChieu, String trangthaiGhe) {
 		super();
 		this.maSuatChieu = maSuatChieu;
 		this.maGhe = maGhe;
@@ -39,7 +39,7 @@ public class Ghe {
 	}
 
 
-	public String isTrangthaiGhe() {
+	public String getTrangthaiGhe() {
 		return trangthaiGhe;
 	}
 

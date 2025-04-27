@@ -19,6 +19,7 @@ import java.awt.event.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class StaffDashboard extends JFrame implements ActionListener {
     private JTable movieTable;
@@ -98,7 +99,7 @@ public class StaffDashboard extends JFrame implements ActionListener {
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Table
-        String[] columns = { "ID", "Tên Phim", "Thể Loại", "Thời Lượng", "Suất Chiếu", "Giá Vé", "Trạng Thái" };
+        String[] columns = { "ID", "Tên Phim", "Thể Loại", "Thời Lượng (Phút)", "Suất Chiếu", "Giá Vé(VNĐ)", "Trạng Thái" };
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -111,7 +112,7 @@ public class StaffDashboard extends JFrame implements ActionListener {
         movieTable.setRowHeight(30);
 
         // Thêm đa ta mẫu
-        addSampleData();
+//        addSampleData();
 
         // Thêm data của CSDL _Sơn_ 
     	addDataSuatChieuTheoSQl();
@@ -176,10 +177,27 @@ public class StaffDashboard extends JFrame implements ActionListener {
         String priceText = tableModel.getValueAt(selectedRow, 5).toString();
         String durationText = tableModel.getValueAt(selectedRow, 3).toString();
         String gioChieu = tableModel.getValueAt(selectedRow, 4).toString();
+        String maSuatChieu = tableModel.getValueAt(selectedRow, 0).toString();
+        // Tạo path để đưa vào khi mở seat 
+        SuatChieu suatchieu = dsSuatChieuSauKhiAdd.stream()
+									        	.filter(sc -> sc.getMaSuatChieu().equals(maSuatChieu))  
+									        	 .findFirst() 
+        										.orElse(null);
+        
+        //kiểm tra xem lấy được đường dẫn chưa 
+        String newpath = suatchieu.getPhim().getDuongdanPoster().trim();
+        if (newpath == null) {
+			JOptionPane.showMessageDialog(this, "null");
+		}else {
+			JOptionPane.showMessageDialog(this, newpath);
+		}
+        
         double price = Double.parseDouble(priceText.replace("$", ""));
-
-        // Hiển thị trang chọn ghế
-        SeatSelectionDialog seatDialog = new SeatSelectionDialog(this, movieTitle, price, durationText, gioChieu);
+     
+        
+        
+        // Hiển thị trang chọn ghế -- Sơn Cập nhật thêm tham số newpath và SuatChieuVao
+        SeatSelectionDialog seatDialog = new SeatSelectionDialog(this, movieTitle, price, durationText, gioChieu,newpath,suatchieu);
         seatDialog.setVisible(true);
 
         if (seatDialog.isConfirmed() && !seatDialog.getSelectedSeats().isEmpty()) {
@@ -259,9 +277,9 @@ public class StaffDashboard extends JFrame implements ActionListener {
 		            sc.getMaSuatChieu(),
 		            sc.getPhim().getTenPhim(),
 		            sc.getPhim().getTheloaiPhim(),
-		            sc.getPhim().getThoiluongPhim() + " phút",
+		            sc.getPhim().getThoiluongPhim(),
 		            sc.getGioChieu(),
-		            sc.getGiaSuat() + " VNĐ",
+		            sc.getGiaSuat(),
 		            "Còn chổ"
 		           
 		          
