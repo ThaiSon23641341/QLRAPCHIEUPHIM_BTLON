@@ -3,26 +3,60 @@ package GUI;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+
+import Connect.ConnectDB;
+import Dao.Ghe_Dao;
+import Dao.Phim_Dao;
+import Dao.SuatChiu_Dao;
+import entity.Ghe;
+import entity.Phim;
+import entity.SuatChieu;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StaffDashboard extends JFrame {
+public class StaffDashboard extends JFrame implements ActionListener {
     private JTable movieTable;
     private DefaultTableModel tableModel;
     private JTextField searchField;
     private JButton logoutButton, bookButton;
     private List<String> bookedSeats;
+	private ArrayList<Phim> dsPim;
+	private ArrayList<Ghe> dsghetrenapp;
+	private ArrayList<SuatChieu> dsSuatChieuSauKhiAdd;
 
     public StaffDashboard() {
+    	
+    	
+    	
+    	
+    	// Khởi tạo kết nối CSDL _ Sơn_ 
+		try {
+			
+			ConnectDB.getInstance().connect();;
+		}catch ( SQLException e) {
+
+		e.printStackTrace();
+		}
+    	
         setTitle("Rạp Phim STD - Trang Nhân Viên");
+        
+        
+        
+        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 600);
         setLocationRelativeTo(null);
         setResizable(false);
+        
+        
+        
+        
 
         // Main
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -79,6 +113,9 @@ public class StaffDashboard extends JFrame {
         // Thêm đa ta mẫu
         addSampleData();
 
+        // Thêm data của CSDL _Sơn_ 
+    	addDataSuatChieuTheoSQl();
+        
         JScrollPane scrollPane = new JScrollPane(movieTable);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
@@ -102,6 +139,9 @@ public class StaffDashboard extends JFrame {
         bookButton.addActionListener(e -> bookSelectedMovie());
 
         add(mainPanel);
+        
+        
+        bookButton.addActionListener(this);
     }
 
     private void styleButton(JButton button) {
@@ -122,19 +162,6 @@ public class StaffDashboard extends JFrame {
                 button.setBackground(new Color(51, 122, 183));
             }
         });
-    }
-
-    // đa ta mẫu
-    private void addSampleData() {
-        String[][] sampleData = {
-                { "1", "The Shawshank Redemption", "Hài Kịch", "2 giờ 22 phút", "19:00 - 21:22", "$9.99", "Còn Chỗ" },
-                { "2", "The Godfather", "Tội Phạm", "2 giờ 55 phút", "20:00 - 22:55", "$8.99", "Còn Chỗ" },
-                { "3", "The Dark Knight", "Hành Động", "2 giờ 32 phút", "21:00 - 23:32", "$10.99", "Còn Chỗ" }
-        };
-
-        for (String[] row : sampleData) {
-            tableModel.addRow(row);
-        }
     }
 
     private void bookSelectedMovie() {
@@ -187,7 +214,20 @@ public class StaffDashboard extends JFrame {
         }
     }
 
-    // tìm kiếm phim
+    // đa ta mẫu
+	private void addSampleData() {
+	    String[][] sampleData = {
+	            { "1", "The Shawshank Redemption", "Hài Kịch", "2 giờ 22 phút", "19:00 - 21:22", "$9.99", "Còn Chỗ" },
+	            { "2", "The Godfather", "Tội Phạm", "2 giờ 55 phút", "20:00 - 22:55", "$8.99", "Còn Chỗ" },
+	            { "3", "The Dark Knight", "Hành Động", "2 giờ 32 phút", "21:00 - 23:32", "$10.99", "Còn Chỗ" }
+	    };
+	
+	    for (String[] row : sampleData) {
+	        tableModel.addRow(row);
+	    }
+	}
+
+	// tìm kiếm phim
     private void searchMovies() {
         String searchText = searchField.getText().toLowerCase();
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
@@ -199,7 +239,38 @@ public class StaffDashboard extends JFrame {
         }
     }
 
-    // đăng xuất
+    // Đổ data từ sql vào table _ Sơn _ 
+	private void addDataSuatChieuTheoSQl(){
+		Phim_Dao dsPhim = new Phim_Dao();
+		
+	 dsPim = dsPhim.getalltbPhim();
+		
+		Ghe_Dao dsGhe = new Ghe_Dao(); 
+		 dsghetrenapp = dsGhe.getAllGhe(); 
+		
+		SuatChiu_Dao dsSuatChieu = new SuatChiu_Dao();
+		dsSuatChieuSauKhiAdd = dsSuatChieu.getallSuatChieu(dsPim, dsghetrenapp);
+		 DefaultTableModel model = (DefaultTableModel) movieTable.getModel();
+		 
+//		 "ID", "Tên Phim", "Thể Loại", "Thời Lượng", "Suất Chiếu", "Giá Vé", "Trạng Thái"
+//		 
+		    for (SuatChieu sc : dsSuatChieuSauKhiAdd) {
+		        model.addRow(new Object[]{
+		            sc.getMaSuatChieu(),
+		            sc.getPhim().getTenPhim(),
+		            sc.getPhim().getTheloaiPhim(),
+		            sc.getPhim().getThoiluongPhim() + " phút",
+		            sc.getGioChieu(),
+		            sc.getGiaSuat() + " VNĐ",
+		            "Còn chổ"
+		           
+		          
+		        });
+		    }
+		
+	}
+
+	// đăng xuất
     private void logout() {
         int confirm = JOptionPane.showConfirmDialog(this,
                 "Bạn có chắc chắn muốn đăng xuất?",
@@ -218,4 +289,13 @@ public class StaffDashboard extends JFrame {
         new StaffDashboard().setVisible(true);
 
     }
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object o = e.getSource();
+				if(o.equals(bookButton)) {
+				
+				}
+		
+	}
 }

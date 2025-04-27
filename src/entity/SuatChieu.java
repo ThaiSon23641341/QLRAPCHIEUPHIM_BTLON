@@ -8,15 +8,15 @@ public class SuatChieu {
 	private Phim  phim ;
 	private int giaSuat; 
 	private LocalDate ngayChieu ; 
-	private int GioChieu ;
+	private String GioChieu ;
 	private ArrayList<Ghe> dsGhe;
 	
 	
 	public SuatChieu() {
-		this("", new Phim() , 0, LocalDate.now(), 0, new ArrayList<Ghe>());
+		this("", new Phim() , 0, LocalDate.now(), "", new ArrayList<Ghe>());
 	}
 	
-	public SuatChieu(String maSuatChieu, Phim phim, int giaSuat, LocalDate ngayChieu, int gioChieu,
+	public SuatChieu(String maSuatChieu, Phim phim, int giaSuat, LocalDate ngayChieu, String gioChieu,
 			ArrayList<Ghe> dsGhe) {
 		super();
 		this.maSuatChieu = maSuatChieu;
@@ -59,11 +59,11 @@ public class SuatChieu {
 		this.ngayChieu = ngayChieu;
 	}
 
-	public int getGioChieu() {
+	public String getGioChieu() {
 		return GioChieu;
 	}
 
-	public void setGioChieu(int gioChieu) {
+	public void setGioChieu(String gioChieu) {
 		GioChieu = gioChieu;
 	}
 

@@ -4,14 +4,14 @@ public class Ghe {
 
 	private String maSuatChieu;
 	private String maGhe ; 
-	private boolean trangthaiGhe;
+	private String trangthaiGhe;
 	
 	
 	public Ghe() {
-		this("", "", true);
+		this("", "", "");
 	}
 	
-	public Ghe(String maSuatChieu, String maGhe, boolean trangthaiGhe) {
+	public Ghe(String maSuatChieu, String maGhe, String trangthaiGhe) {
 		super();
 		this.maSuatChieu = maSuatChieu;
 		this.maGhe = maGhe;
@@ -39,12 +39,12 @@ public class Ghe {
 	}
 
 
-	public boolean isTrangthaiGhe() {
+	public String isTrangthaiGhe() {
 		return trangthaiGhe;
 	}
 
 
-	public void setTrangthaiGhe(boolean trangthaiGhe) {
+	public void setTrangthaiGhe(String trangthaiGhe) {
 		this.trangthaiGhe = trangthaiGhe;
 	} 
 	

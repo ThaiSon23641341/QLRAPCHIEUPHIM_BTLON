@@ -8,16 +8,16 @@ public class Phim {
 	private int dgPhim;
 	private String tenDaoDien;
 	private String nsx;
+	private int thoiluongPhim;
 	private String duongdanPoster;
 
 	public Phim() {
-		this("", "", "", "", 0, "", "", "");
+		this("", "", "", "", 0, "", "", 0,"");
 
 	}
 
 	public Phim(String maPhim, String tenPhim, String theloaiPhim, String motaPhim, int dgPhim, String tenDaoDien,
-			String nsx, String duongdanPoster) {
-		super();
+			String nsx,int thoiluongPHim ,String duongdanPoster) {
 		this.maPhim = maPhim;
 		this.tenPhim = tenPhim;
 		this.theloaiPhim = theloaiPhim;
@@ -25,6 +25,18 @@ public class Phim {
 		this.dgPhim = dgPhim;
 		this.tenDaoDien = tenDaoDien;
 		this.nsx = nsx;
+		this.thoiluongPhim = thoiluongPHim;
+		this.duongdanPoster = duongdanPoster;
+	}
+	
+	
+
+	public int getThoiluongPhim() {
+		return thoiluongPhim;
+	}
+
+	public void setThoiluongPhim(int thoiluongPhim) {
+		this.thoiluongPhim = thoiluongPhim;
 	}
 
 	public String getMaPhim() {
@@ -64,7 +76,7 @@ public class Phim {
 	}
 
 	public void setDgPhim(int dgPhim) {
-		if (dgPhim > 5 || dgPhim > 0) {
+		if (dgPhim > 10 || dgPhim > 0) {
 			throw new IllegalArgumentException("Đánh giá phải lớn hơn 0 và nhỏ hơn 5");
 		}
 
