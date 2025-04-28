@@ -61,5 +61,109 @@ public class SuatChiu_Dao {
 
 	    return dsSuatChieu;
 	}
+	
+	
+	 // Phương thức thêm suất chiếu vào database với các tham số từ JTextField
+	public boolean createSuatChieu(String maSuatChieu, int giaSuat, String ngayChieu, String gioChieu, String maPhim) {
+	    boolean isSuccess = false;
 
+	    try {
+	        // Kết nối đến cơ sở dữ liệu
+	        ConnectDB.getInstance();
+	        Connection con = ConnectDB.getCon();
+
+	        // Câu lệnh SQL để chèn một suất chiếu mới (Sử dụng String concatenation)
+	        String sql = "INSERT INTO SuatChieu (maSuatChieu, giaSuat, ngayChieu, gioChieu, maPhim) "
+	                + "VALUES ('" + maSuatChieu + "', " + giaSuat + ", '" + ngayChieu + "', '" + gioChieu + "', '" + maPhim + "')";
+
+	        // Tạo Statement và thực thi câu lệnh SQL
+	        Statement stmt = con.createStatement();
+	        int result = stmt.executeUpdate(sql);
+
+	        // Kiểm tra nếu việc thêm thành công
+	        if (result > 0) {
+	            isSuccess = true;
+	        }
+
+	        // Đóng kết nối
+	        stmt.close();
+//	        con.close();
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return isSuccess;
+	}
+
+//	/ Thêm phương thức xóa suất chiếu
+	public boolean deleteSuatChieu(String maSuatChieu) {
+	    boolean isSuccess = false;
+
+	    try {
+	        // Kết nối đến cơ sở dữ liệu
+	        ConnectDB.getInstance();
+	        Connection con = ConnectDB.getCon();
+
+	        // Câu lệnh SQL để xóa suất chiếu
+	        String sql = "DELETE FROM SuatChieu WHERE maSuatChieu = '" + maSuatChieu + "'";
+
+	        // Tạo Statement và thực thi câu lệnh SQL
+	        Statement stmt = con.createStatement();
+	        int result = stmt.executeUpdate(sql);
+
+	        // Kiểm tra nếu việc xóa thành công
+	        if (result > 0) {
+	            isSuccess = true;
+	        }
+
+	        // Đóng kết nối
+	        stmt.close();
+	        // con.close();
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return isSuccess;
+	}
+	
+	
+	public boolean updateSuatChieu(String maSuatChieu, int giaSuat, String ngayChieu, String gioChieu, String maPhim) {
+        boolean isUpdated = false;
+        Statement stmt = null;
+        
+        // Kết nối đến cơ sở dữ liệu
+        try {
+            ConnectDB.getInstance();
+            Connection con = ConnectDB.getCon();
+            
+            // Câu lệnh SQL để cập nhật thông tin suất chiếu
+            String sql = "UPDATE SuatChieu SET giaSuat = " + giaSuat + 
+                         ", ngayChieu = '" + ngayChieu + 
+                         "', gioChieu = '" + gioChieu + 
+                         "', maPhim = '" + maPhim + 
+                         "' WHERE maSuatChieu = '" + maSuatChieu + "'";
+            
+            // Tạo Statement và thực thi câu lệnh SQL
+            stmt = con.createStatement();
+            
+            // Thực thi câu lệnh UPDATE
+            int rowsAffected = stmt.executeUpdate(sql);
+            
+            if (rowsAffected > 0) {
+                isUpdated = true;  // Cập nhật thành công nếu ít nhất 1 dòng bị ảnh hưởng
+            }
+
+            // Đóng statement
+            stmt.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return isUpdated;
+    }
+	
+	
 }

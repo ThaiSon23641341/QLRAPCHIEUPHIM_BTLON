@@ -30,6 +30,7 @@ public class StaffDashboard extends JFrame implements ActionListener {
 	private ArrayList<Phim> dsPim;
 	private ArrayList<Ghe> dsghetrenapp;
 	private ArrayList<SuatChieu> dsSuatChieuSauKhiAdd;
+	private Ghe_Dao dsGhe;
 
     public StaffDashboard() {
     	
@@ -205,7 +206,7 @@ public class StaffDashboard extends JFrame implements ActionListener {
             double totalAmount = seatDialog.getTotalPrice();
 
             // Hiển thị thanh toán
-            PaymentDialog paymentDialog = new PaymentDialog(this, movieTitle, selectedSeats, totalAmount);
+            PaymentDialog paymentDialog = new PaymentDialog(this, movieTitle, selectedSeats, totalAmount,suatchieu);
             paymentDialog.setVisible(true);
 
             if (paymentDialog.isPaymentSuccessful()) {
@@ -228,6 +229,9 @@ public class StaffDashboard extends JFrame implements ActionListener {
                                 "\nTổng Tiền: $" + String.format("%.2f", totalAmount),
                         "Đặt Vé Thành Công",
                         JOptionPane.INFORMATION_MESSAGE);
+                String mathanhcong = paymentDialog.getmaSuatChieu();
+                dsGhe.updateTrangThaiGhe(maSuatChieu, "1");
+                
             }
         }
     }
@@ -263,7 +267,7 @@ public class StaffDashboard extends JFrame implements ActionListener {
 		
 	 dsPim = dsPhim.getalltbPhim();
 		
-		Ghe_Dao dsGhe = new Ghe_Dao(); 
+		 dsGhe = new Ghe_Dao(); 
 		 dsghetrenapp = dsGhe.getAllGhe(); 
 		
 		SuatChiu_Dao dsSuatChieu = new SuatChiu_Dao();

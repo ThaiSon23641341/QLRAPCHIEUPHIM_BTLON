@@ -1,3 +1,4 @@
+
 package GUI;
 
 import javax.swing.*;
@@ -94,13 +95,13 @@ public class SeatSelectionDialog extends JDialog {
                 seatButton.setFocusPainted(false);
 
                 // Đặt màu đỏ và không cho phép chọn nếu ghế đã được đặt
-                if (Math.random() < 0.2) {
-                    seatButton.setBackground(Color.RED);
-                    seatButton.setEnabled(false);
-                } else {
+//                if (Math.random() < 0.2) {
+//                    seatButton.setBackground(Color.RED);
+//                    seatButton.setEnabled(false);
+//                } else {
                     // Thêm hành động khi ghế được chọn
                     seatButton.addActionListener(e -> toggleSeatSelection(seatButton, seatNumber));
-                }
+//                }
 
                 // Thêm ghế vào bảng
                 seatPanel.add(seatButton);
@@ -132,7 +133,7 @@ public class SeatSelectionDialog extends JDialog {
         legendPanel.add(new JLabel("Đã Đặt:"));
         legendPanel.add(bookedLegend);
 
-        selectedSeatsLabel = new JLabel("Đã Chọn: None");
+        selectedSeatsLabel = new JLabel("Đã Chọn: ");
         totalPriceLabel = new JLabel("Tổng Tiền: $0.00");
 
         infoPanel.add(legendPanel);
@@ -235,19 +236,17 @@ public class SeatSelectionDialog extends JDialog {
         	
         	
             String trangThai = ghe.getTrangthaiGhe();  // Trạng thái ghế (Trống, Đã chọn, Đã đặt)
-      
-            	System.out.print( trangThai + ' ');
-         
+               
             // Tìm nút ghế tương ứng với mã ghế
             for (JButton seatButton : seatButtons) {
                 if (seatButton.getText().equals(seatNumber)) {
-                    if ("Trống".equals(trangThai)) {
+                    if ("".equals(trangThai)) {
                         seatButton.setBackground(Color.GREEN);
                         seatButton.setEnabled(true);
                     } else if ("Đã chọn".equals(trangThai)) {
                         seatButton.setBackground(Color.BLUE);
                         seatButton.setEnabled(true);
-                    } else if ("Đã đặt".equals(trangThai)) {
+                    } else if ("1".equals(trangThai)) {
                         seatButton.setBackground(Color.RED);
                         seatButton.setEnabled(false);
                     }

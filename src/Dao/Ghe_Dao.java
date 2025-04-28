@@ -79,7 +79,7 @@ public class Ghe_Dao {
 	        Connection con = ConnectDB.getCon();
 	        
 	        // Câu lệnh SQL để cập nhật trạng thái ghế
-	        String sql = "UPDATE Ghe SET TrangThai = '" + trangThaiMoi + "' WHERE maGhe = '" + maGhe + "' AND TrangThai = 'Trống'";
+	        String sql = "UPDATE Ghe SET TrangThai = '" + trangThaiMoi + "' WHERE maGhe = '" + maGhe +  "'AND TrangThai = '0'";
 	        
 	        // Tạo Statement và thực thi câu lệnh SQL
 	        stmt = con.createStatement();
@@ -139,6 +139,45 @@ public class Ghe_Dao {
 	        
 	        return isSuccess;
 	    }
+	 
+	 
+	 public boolean deleteGheByMaSuatChieu(String maSuatChieu) {
+		    boolean isDeleted = false;
+		    Statement stmt = null;
+
+		    try {
+		        // Kết nối đến cơ sở dữ liệu
+		        ConnectDB.getInstance();
+		        Connection con = ConnectDB.getCon();
+		        
+		        // Câu lệnh SQL để xóa các ghế theo mã suất chiếu
+		        String sql = "DELETE FROM Ghe WHERE maSuatChieu = '" + maSuatChieu + "'";
+
+		        // Tạo Statement và thực thi câu lệnh SQL
+		        stmt = con.createStatement();
+
+		        // Thực thi câu lệnh DELETE
+		        int rowsAffected = stmt.executeUpdate(sql);
+
+		        // Kiểm tra số dòng bị ảnh hưởng để xác nhận xóa thành công
+		        if (rowsAffected > 0) {
+		            isDeleted = true;
+		        }
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    } finally {
+		        try {
+		            if (stmt != null) {
+		                stmt.close();
+		            }
+		        } catch (SQLException e) {
+		            e.printStackTrace();
+		        }
+		    }
+		    
+		    return isDeleted;
+		}
+
 
 
 }

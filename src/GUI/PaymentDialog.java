@@ -1,6 +1,10 @@
 package GUI;
 
 import javax.swing.*;
+
+import entity.Ghe;
+import entity.SuatChieu;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.text.SimpleDateFormat;
@@ -17,13 +21,15 @@ public class PaymentDialog extends JDialog {
     private List<String> selectedSeats;
     private String movieTitle;
     private boolean paymentSuccessful = false;
+    private SuatChieu suatchieuchon;
     
-    public PaymentDialog(JFrame parent, String movieTitle, List<String> selectedSeats, double totalAmount) {
+    public PaymentDialog(JFrame parent, String movieTitle, List<String> selectedSeats, double totalAmount,SuatChieu suatChieu) {
+    	
         super(parent, "Thanh Toán Cho " + movieTitle, true);
         this.movieTitle = movieTitle;
         this.selectedSeats = selectedSeats;
         this.totalAmount = totalAmount;
-        
+        this.suatchieuchon = suatChieu;
         setSize(500, 400);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
@@ -192,9 +198,33 @@ public class PaymentDialog extends JDialog {
             JOptionPane.INFORMATION_MESSAGE);
         
         dispose();
+       updateSeat(suatchieuchon.getDsGhe());
     }
     
     public boolean isPaymentSuccessful() {
         return paymentSuccessful;
     }
+    
+    public String getmaSuatChieu() {
+    	return suatchieuchon.getMaSuatChieu();
+    }
+    
+    
+    public void updateSeat(List<Ghe> danhSachGhe) {
+        for (Ghe ghe : danhSachGhe) {
+            // Lấy 3 ký tự cuối của mã ghế
+            String seatNumber = ghe.getMaGhe().substring(ghe.getMaGhe().length() - 3);
+
+            for (String seat : selectedSeats) {
+                if (seatNumber.equals(seat)) {
+                  
+                	ghe.setTrangthaiGhe("1");
+                  
+                }
+            }
+        }
+    }
+
+ 
+
 } 
